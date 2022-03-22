@@ -3,9 +3,12 @@
 
 # dependencies
 /node_modules
-/server/node_modules
 /.pnp
 .pnp.js
+
+#server
+/server/node_modules
+/server/logs
 
 # testing
 /coverage
