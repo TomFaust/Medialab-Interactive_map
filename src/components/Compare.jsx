@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import '../styles/compare.scss'
 
-export function Compare() {
+export function Compare({open}) {
     const [data, setData] = useState({
         'name': 'Nederland',
         'temperature': 8.5,
@@ -17,19 +17,23 @@ export function Compare() {
         console.log('Pull the data Kronk');
         // Fetch
     },[])
-
-    return(
-        <div className='compare'>
-            <div className="country1">
-                <h3>{data.name}</h3>
-                <p>{data.temperature}</p>
-                <p>{data.hardheid}</p>
+    
+    if (open) {
+        return(
+            <div className='compare'>
+                <div className="country1">
+                    <h3>{data.name}</h3>
+                    <p>{data.temperature}</p>
+                    <p>{data.hardheid}</p>
+                </div>
+                <div className="country2">
+                    <h3>{data2.name}</h3>
+                    <p>{data2.temperature}</p>
+                    <p>{data2.hardheid}</p>
+                </div>
             </div>
-            <div className="country2">
-                <h3>{data2.name}</h3>
-                <p>{data2.temperature}</p>
-                <p>{data2.hardheid}</p>
-            </div>
-        </div>
-    )
+        )
+    } else {
+        return null
+    }
 }
