@@ -1,4 +1,5 @@
 import './styles/general.scss'
+import './styles/app.scss'
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Compare } from './components/Compare';
@@ -34,7 +35,7 @@ export default function App() {
             </div>
             <div ref={mapContainer} className="map-container" />
 
-            <div id='open-compare' onClick={switchCompare}>&gt;</div>
+            <div id='open-compare' onClick={switchCompare}>&gt;&gt;</div>
             <Compare open={compareOpen} />
         </div>
     );
