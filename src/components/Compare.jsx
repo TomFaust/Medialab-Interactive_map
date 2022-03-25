@@ -1,18 +1,39 @@
 import '../styles/compare.scss'
 
 export function Compare({open, baseData, compareData}) {
+
+    let baseCountryContent
+
+    function isEmptyObject(obj) {
+        if (obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function countryContent(data) {
+        if (isEmptyObject(data)) {
+            return <p>Selecteer een land.</p>
+        } else {
+            return (
+                <div>
+                    <h3>{data.location}</h3>
+                    <p>{data.temp}</p>
+                    <p>{data.hardness}</p>
+                </div>
+            )
+        }
+    }
+
     if (open) {
         return(
             <div className='compare'>
-                <div className="country1">
-                    <h3>{baseData.location}</h3>
-                    <p>{baseData.temp}</p>
-                    <p>{baseData.hardness}</p>
+                <div className="baseCountry">
+                    {countryContent(baseData)}
                 </div>
-                <div className="country2">
-                    <h3>{compareData.location}</h3>
-                    <p>{compareData.temp}</p>
-                    <p>{compareData.hardness}</p>
+                <div className="compareCountry">
+                    {countryContent(compareData)}
                 </div>
             </div>
         )
