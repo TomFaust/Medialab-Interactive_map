@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import { Compare } from './components/Compare';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidG9tLWZhdXN0IiwiYSI6ImNsMTI3M2JkbzAzcG8za3BkZG42ZWF6cTEifQ.6QbYKTRSF5IXZKKpXXKyaA';
 
@@ -26,6 +27,7 @@ export default function App() {
                 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
             </div>
             <div ref={mapContainer} className="map-container" />
+            <Compare />
         </div>
     );
 
