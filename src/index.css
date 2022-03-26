@@ -13,11 +13,10 @@ code {
 }
 
 .map-container,#root,.container,body {
-  display: block;
-  position: absolute;
   top: 0;
-  bottom: 0;
+  left: 0;
   width: 100%;
+  min-height:100vh;
 }
 
 body{
@@ -26,7 +25,8 @@ body{
 }
 
 .sidebar {
-  background-color: rgba(35, 55, 75, 0.9);
+  background-color: #26b4f4;
+  border: #109ede solid 2px;
   color: #fff;
   padding: 6px 12px;
   font-family: monospace;
@@ -37,3 +37,12 @@ body{
   margin: 12px;
   border-radius: 4px;
 }
+
+  .marker {
+    background-image: url('https://nl.farnell.com/productimages/large/en_GB/3253131-40.jpg');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+  }

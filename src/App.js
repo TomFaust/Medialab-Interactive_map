@@ -9,16 +9,13 @@ export default function App() {
     const [lng, setLng] = useState(0);
     const [lat, setLat] = useState(0);
     const [zoom, setZoom] = useState(9);
-    let tempLng;
-    let tempLat;
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
 
-
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
+            style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
             center: [lng, lat],
             zoom: zoom
         });
@@ -26,7 +23,7 @@ export default function App() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
 
-                map.current.flyTo({
+                map.current.jumpTo({
                     center: [
                         position.coords.longitude,
                         position.coords.latitude
@@ -37,7 +34,6 @@ export default function App() {
             });
         }
 
-
         map.current.on('move', () => {
             setLng(parseFloat(map.current.getCenter().lng.toFixed(4)));
             setLat(parseFloat(map.current.getCenter().lat.toFixed(4)));
@@ -45,6 +41,44 @@ export default function App() {
         });
 
         document.getElementsByClassName('mapboxgl-control-container')[0].remove();
+
+        map.current.loadImage(
+            'https://docs.mapbox.com/mapbox-gl-js/assets/cat.png',
+            (error, image) => {
+                if (error) throw error;
+
+                // Add the image to the map style.
+                map.current.addImage('cat', image);
+
+                // Add a data source containing one point feature.
+                map.current.addSource('point', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': [
+                            {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [-77.4144, 25.0759]
+                                }
+                            }
+                        ]
+                    }
+                });
+
+                // Add a layer to use the image to represent the data.
+                map.current.addLayer({
+                    'id': 'points',
+                    'type': 'symbol',
+                    'source': 'point', // reference the data source
+                    'layout': {
+                        'icon-image': 'cat', // reference the image
+                        'icon-size': 0.25
+                    }
+                });
+            }
+        );
 
     });
 
