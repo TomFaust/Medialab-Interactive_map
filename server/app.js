@@ -1,8 +1,8 @@
 import express from 'express'
-import mongoose from "mongoose"
 import cors from 'cors'
 import bodyParser from 'body-parser';
 
+import ServerConnection from './api/server.js';
 import {logger} from './config/logger.js';
 import { env } from './config/globals.js';
 
@@ -16,14 +16,12 @@ import { env } from './config/globals.js';
         app.use(cors())
         app.use(bodyParser.json());
 
+        ServerConnection()
+
         app.get('/api', (req, res) =>  {
             res.json('Welcome to the API')
         })
 
-        //Connect to DB
-        mongoose.connect(env.NODE_CONNECTION, { useNewUrlParser: true},() => {
-            console.log('Conntected to database')
-        });
         
         app.listen(env.NODE_PORT, () => 
         console.log(`Server is running on ${env.NODE_PORT} in ${process.env.NODE_ENV} mode`
