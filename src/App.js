@@ -13,7 +13,7 @@ export default function App() {
     const [lat, setLat] = useState(42.35);
     const [zoom, setZoom] = useState(9);
 
-    const [compareOpen, setCompareOpen] = useState(false);
+    const [openCompare, setOpenCompare] = useState(false);
     const [waterData, setWaterData] = useState({});
     const [baseData, setBaseData] = useState({});
     const [compareData, setCompareData] = useState({});
@@ -34,12 +34,14 @@ export default function App() {
     function selectedData(location) {
         // Get the waterdata belonging to the location from waterData
 
-        // Check if this is for the baseData or compareData & put the data in the correct state
+        // Check if this is for the baseData or compareData 
+        // Put the data in the correct state
     }
 
     function fetchWaterData() {
         // Fetch waterdata from API & setWaterData()
         console.log('Pull the data Kronk');
+
 
         // Placeholder code:
         setBaseData({
@@ -55,10 +57,6 @@ export default function App() {
         // End of placeholder code
     }
 
-    function switchCompare(){
-        setCompareOpen(!compareOpen)
-    }
-
     return (
         <div>
             <div className="sidebar">
@@ -66,7 +64,7 @@ export default function App() {
             </div>
             <div ref={mapContainer} className="map-container" />
 
-            <div id='open-compare' onClick={switchCompare}>&gt;&gt;</div>
+            <div id='open-compare' onClick={setOpenCompare(!openCompare)}>&gt;&gt;</div>
             <Compare open={compareOpen} baseData={baseData} compareData={compareData} />
         </div>
     );
