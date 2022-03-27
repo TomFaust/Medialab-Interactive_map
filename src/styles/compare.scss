@@ -23,10 +23,18 @@
 
     .baseCountry, .compareCountry{
         height: 50%;
+        width: 100%;
         padding: 15px;
     }
 
     .compareCountry{
         border-top: rgba(19, 150, 211, 0.9) solid 4px;
+    }
+
+    .feedback-msg{
+        margin-top: 5vh;
+        text-align: center;
+        font-style: italic;
+        font-weight: 400;
     }
 }

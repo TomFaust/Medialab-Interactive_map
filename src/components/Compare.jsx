@@ -14,7 +14,7 @@ export function Compare({open, baseData, compareData}) {
 
     function countryContent(data) {
         if (isEmptyObject(data)) {
-            return <p>Selecteer een land.</p>
+            return <p className='feedback-msg'>Selecteer een land op de kaart om waterstatistieken te vergelijken.</p>
         } else {
             return (
                 <div>
