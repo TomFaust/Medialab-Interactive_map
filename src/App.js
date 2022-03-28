@@ -1,5 +1,6 @@
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import React, {useRef, useEffect, useState} from 'react';
+import industry from './Assets/map-icons/industry.png'
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -9,8 +10,6 @@ export default function App() {
     const [lng, setLng] = useState(0);
     const [lat, setLat] = useState(0);
     const [zoom, setZoom] = useState(9);
-
-    let dummyData = {}
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
@@ -46,19 +45,29 @@ export default function App() {
 
         map.current.on('load', () => {
 
+            const importAll = require =>
+                require.keys().reduce((acc, next) => {
+                    acc[next.replace("./", "")] = require(next);
+                    return acc;
+                }, {});
+
+            const images = importAll(
+                require.context("./Assets/map-icons", false, /\.(png|jpe?g|svg)$/)
+            );
+
             map.current.loadImage(
-                'https://docs.mapbox.com/mapbox-gl-js/assets/cat.png',
+                images['flag.png'],
                 (error, image) => {
                     if (error) throw error;
 
                     // Add the image to the map style.
-                    map.current.addImage('cat', image);
+                    map.current.addImage('icon', image);
 
                     // Add a data source containing one point feature.
                     map.current.addSource('point', {
                         'type': 'geojson',
                         'cluster': true,
-                        'clusterMaxZoom': 14, // Max zoom to cluster points on
+                        'clusterMaxZoom': 21, // Max zoom to cluster points on
                         'clusterRadius': 50,
                         'data': {
                             'type': 'FeatureCollection',
@@ -68,6 +77,9 @@ export default function App() {
                                     'geometry': {
                                         'type': 'Point',
                                         'coordinates': [5.4135, 51.9669]
+                                    },
+                                    'properties':{
+                                        'name':'a flag'
                                     }
                                 },
                                 {
@@ -75,6 +87,9 @@ export default function App() {
                                     'geometry': {
                                         'type': 'Point',
                                         'coordinates': [5.5135, 51.9669]
+                                    },
+                                    'properties':{
+                                        'name':'a flag'
                                     }
                                 }
                             ]
@@ -87,24 +102,10 @@ export default function App() {
                         source: 'point',
                         filter: ['has', 'point_count'],
                         paint: {
-                            'circle-color': [
-                                'step',
-                                ['get', 'point_count'],
-                                '#51bbd6',
-                                100,
-                                '#f1f075',
-                                750,
-                                '#f28cb1'
-                            ],
-                            'circle-radius': [
-                                'step',
-                                ['get', 'point_count'],
-                                20,
-                                100,
-                                30,
-                                750,
-                                40
-                            ]
+                            'circle-color': '#26b4f4',
+                            'circle-radius': 15,
+                            'circle-stroke-width': 2,
+                            'circle-stroke-color': '#109ede',
                         }
                     });
 
@@ -116,25 +117,33 @@ export default function App() {
                         layout: {
                             'text-field': '{point_count_abbreviated}',
                             'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12
+                            'text-size': 12,
+                        },
+                        paint: {
+                            "text-color": "#ffffff"
                         }
                     });
 
 
                     // Add a layer to use the image to represent the data.
                     map.current.addLayer({
-                        'id': 'points',
+                        'id': 'unclustered-point',
                         'type': 'symbol',
                         'source': 'point', // reference the data source
                         'filter': ['!', ['has', 'point_count']],
                         'layout': {
-                            'icon-image': 'cat', // reference the image
-                            'icon-size': 0.25
+                            'icon-image': 'icon', // reference the image
+                            'icon-size': 0.1
                         }
                     });
                 }
             );
         })
+
+        map.current.on('click', 'unclustered-point', (e) => {
+            const description = e.features[0].properties;
+            console.log(description)
+        });
 
     });
 
