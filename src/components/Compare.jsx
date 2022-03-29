@@ -10,6 +10,41 @@ export function Compare({open, baseData, compareData}) {
         }
     }
 
+    // Dynamically load all the stats
+    function statsDivs() {
+        let divs = []
+        let index = 0
+
+        // Loop through all the properties
+        for (const properties in baseData) {
+            console.log(properties + baseData[properties] + compareData[properties]);
+
+            // Excluded properties: 'location'
+            if (properties !== 'location') {
+                let baseId = `base-${properties}`
+                let compareId = `compare-${properties}`
+
+                divs.push(
+                    <div className="stats" key={index}>
+                        <div className='max-stat'>
+                            <div id={baseId}>{baseData[properties]}</div>
+                        </div>
+                        <p>{properties}</p>
+                        <div className='max-stat'>
+                            <div id={compareId}>{compareData[properties]}</div>
+                        </div>
+                    </div>
+                )
+            }
+
+            index++
+        }
+
+        console.log(divs);
+
+        return divs
+    }
+
     // Check if the compare box is opened
     if (open) {
         // Check if all the data is provided
@@ -28,25 +63,7 @@ export function Compare({open, baseData, compareData}) {
                             <h3>{compareData.location}</h3>
                         </div>
 
-                        <div className="stats">
-                            <div className='max-stat'>
-                                <div id='base-hardness'>{baseData.hardness}</div>
-                            </div>
-                            <p>Hardness</p>
-                            <div className='max-stat'>
-                                <div id='compare-hardness'>{compareData.hardness}</div>
-                            </div>
-                        </div>
-
-                        <div className="stats">
-                            <div className='max-stat'>
-                                <div id='base-temp'>{baseData.temp}</div>
-                            </div>
-                            <p>Temperature</p>
-                            <div className='max-stat'>
-                                <div id='compare-temp'>{compareData.temp}</div>
-                            </div>
-                        </div>
+                        {statsDivs()}
                     </div>
                 </div>
             )
