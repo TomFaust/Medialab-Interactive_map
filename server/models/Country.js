@@ -15,7 +15,7 @@ const CountrySchema = new mongoose.Schema({
     },
     status: { 
         type: Boolean,
-        required: true,
+        default: true
     },
     date: { 
         type: Date,
