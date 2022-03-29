@@ -1,10 +1,10 @@
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import React, { useRef, useEffect, useState } from 'react';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 export default function App() {
-
 
     const mapContainer = useRef(null);
     const map = useRef(null);
@@ -43,7 +43,7 @@ export default function App() {
             setZoom(parseFloat(map.current.getZoom().toFixed(2)));
         });
 
-        document.getElementsByClassName('mapboxgl-control-container')[0].remove();
+        document.getElementsByClassName('mapboxgl-ctrl-attrib-inner')[0].remove();
 
         map.current.on('load', () => {
 
@@ -146,6 +146,14 @@ export default function App() {
             const description = e.features[0].properties;
             console.log(description)
         });
+
+        map.current.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+            }),
+            'top-left'
+        );
 
     });
 
