@@ -1,5 +1,9 @@
-import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import './styles/general.scss'
+import './styles/app.scss'
 import React, { useRef, useEffect, useState } from 'react';
+import { Compare } from './components/Compare';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import industry from './Assets/map-icons/industry.png'
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -12,6 +16,19 @@ export default function App() {
     const [lat, setLat] = useState(0);
     const [zoom, setZoom] = useState(9);
 
+    const [openCompare, setOpenCompare] = useState(false);
+    const [waterData, setWaterData] = useState({});
+    const [baseData, setBaseData] = useState({
+        'location': 'Nederland',
+        'temp': 9,
+        'hardness': 20
+    });
+    const [compareData, setCompareData] = useState({
+        'location': 'Frankrijk',
+        'temp': 7,
+        'hardness': 24
+    });
+
     useEffect(() => {
 
         if (map.current) return; // initialize map only once
@@ -19,13 +36,14 @@ export default function App() {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
+
             center: [lng, lat],
             zoom: zoom
         });
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-
+    
                 map.current.jumpTo({
                     center: [
                         position.coords.longitude,
@@ -33,38 +51,38 @@ export default function App() {
                     ],
                     essential: true // this animation is considered essential with respect to prefers-reduced-motion
                 });
-
+    
             });
         }
-
+    
         map.current.on('move', () => {
             setLng(parseFloat(map.current.getCenter().lng.toFixed(4)));
             setLat(parseFloat(map.current.getCenter().lat.toFixed(4)));
             setZoom(parseFloat(map.current.getZoom().toFixed(2)));
         });
-
+    
         document.getElementsByClassName('mapboxgl-control-container')[0].remove();
-
+    
         map.current.on('load', () => {
-
+    
             const importAll = require =>
                 require.keys().reduce((acc, next) => {
                     acc[next.replace("./", "")] = require(next);
                     return acc;
                 }, {});
-
+    
             const images = importAll(
                 require.context("./Assets/map-icons", false, /\.(png|jpe?g|svg)$/)
             );
-
+    
             map.current.loadImage(
                 images['industry.png'],
                 (error, image) => {
                     if (error) throw error;
-
+    
                     // Add the image to the map style.
                     map.current.addImage('icon', image);
-
+    
                     // Add a data source containing one point feature.
                     map.current.addSource('point', {
                         'type': 'geojson',
@@ -97,7 +115,7 @@ export default function App() {
                             ]
                         }
                     });
-
+    
                     map.current.addLayer({
                         id: 'clusters',
                         type: 'circle',
@@ -110,7 +128,7 @@ export default function App() {
                             'circle-stroke-color': '#109ede',
                         }
                     });
-
+    
                     map.current.addLayer({
                         id: 'cluster-count',
                         type: 'symbol',
@@ -125,8 +143,8 @@ export default function App() {
                             "text-color": "#ffffff"
                         }
                     });
-
-
+    
+    
                     // Add a layer to use the image to represent the data.
                     map.current.addLayer({
                         'id': 'unclustered-point',
@@ -141,13 +159,29 @@ export default function App() {
                 }
             );
         })
-
+    
         map.current.on('click', 'unclustered-point', (e) => {
             const description = e.features[0].properties;
             console.log(description)
         });
 
-    });
+        fetchWaterData()
+    }, []);
+
+    // Call this function via an onClick on the mappositions
+    function selectedData(location) {
+        // Get the waterdata belonging to the location from waterData
+
+        // Check if this is for the baseData or compareData 
+        // Put the data in the correct state
+    }
+
+    function fetchWaterData() {
+        // Fetch waterdata from API & setWaterData()
+        console.log('Pull the data Kronk');
+    }
+
+    
 
     return (
         <div className='container'>
@@ -156,6 +190,9 @@ export default function App() {
             </div>
             <div ref={mapContainer} className="map-container">
             </div>
+
+            <div id='open-compare' onClick={() => setOpenCompare(!openCompare)}>&gt;&gt;</div>
+            <Compare open={openCompare} baseData={baseData} compareData={compareData} />
         </div>
     );
 
