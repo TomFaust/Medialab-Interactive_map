@@ -1,12 +1,41 @@
-#open-compare{
+#menu-bar{
     position: absolute;
-    top: 0;
-    left: 15px;
+    top: 20px;
+    left: 20px;
     z-index: 1;
 
-    font-size: 2rem;
-    font-weight: 900;
-    color: rgb(92, 92, 92);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 
-    user-select: none;
+    padding: 8px;
+
+    background-color: white;
+    border-radius: 7px;
+    box-shadow: 2px 2px 7px 2px #0000001C;
+
+    #search{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        *{
+            margin-left: 15px;
+        }
+
+        p{
+            margin-top: 0;
+            margin-bottom: 0;
+            user-select: none;
+        }
+    }
+
+    #compare-icon{
+        padding-left: 5px;
+        border-left: 1px solid #9E9E9E;
+
+    }
 }
+

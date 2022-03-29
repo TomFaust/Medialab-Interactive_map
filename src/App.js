@@ -4,6 +4,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Compare } from './components/Compare';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import industry from './Assets/map-icons/industry.png'
+import CompareIcon from './Assets/compare-icon.svg'
+import MenuIcon from './Assets/menu-icon.svg'
+import SearchIcon from './Assets/search-icon.svg'
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -191,7 +194,15 @@ export default function App() {
             <div ref={mapContainer} className="map-container">
             </div>
 
-            <div id='open-compare' onClick={() => setOpenCompare(!openCompare)}>&gt;&gt;</div>
+            <div id='menu-bar'>
+                <div id='search'>
+                    <img src={MenuIcon}/>
+                    <p>Search a country</p>
+                    <img src={SearchIcon}/>
+                </div>
+                <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
+                {/* <CompareIcon className='compare-icon' onClick={() => setOpenCompare(!openCompare)} /> */}
+            </div>
             <Compare open={openCompare} baseData={baseData} compareData={compareData} />
         </div>
     );
