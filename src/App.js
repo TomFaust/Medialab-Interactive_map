@@ -18,7 +18,7 @@ export default function App() {
 
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
+            style: 'mapbox://styles/qwinsie/cl1c6rl09007n14pk10egyijf',
             center: [lng, lat],
             zoom: zoom
         });
