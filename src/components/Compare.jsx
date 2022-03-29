@@ -21,17 +21,17 @@ export function Compare({open, baseData, compareData}) {
 
             // Excluded properties: 'location'
             if (properties !== 'location') {
-                let baseId = `base-${properties}`
-                let compareId = `compare-${properties}`
+                let baseLength = baseData[properties]
+                let compareLength = compareData[properties]
 
                 divs.push(
                     <div className="stats" key={index}>
                         <div className='max-stat'>
-                            <div id={baseId}>{baseData[properties]}</div>
+                            <div style={{width: baseLength+'%'}}>{baseData[properties]}</div>
                         </div>
                         <p>{properties}</p>
                         <div className='max-stat'>
-                            <div id={compareId}>{compareData[properties]}</div>
+                            <div style={{width: compareLength+'%'}}>{compareData[properties]}</div>
                         </div>
                     </div>
                 )
