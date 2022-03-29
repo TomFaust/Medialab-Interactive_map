@@ -60,7 +60,7 @@ export default function App() {
             setZoom(parseFloat(map.current.getZoom().toFixed(2)));
         });
 
-        document.getElementsByClassName('mapboxgl-control-container')[0].remove();
+        document.getElementsByClassName('mapboxgl-ctrl-attrib-inner')[0].remove();
 
         map.current.on('load', () => {
 
@@ -172,7 +172,6 @@ export default function App() {
             'top-left'
         );
 
-    });
         fetchWaterData()
     }, []);
 
