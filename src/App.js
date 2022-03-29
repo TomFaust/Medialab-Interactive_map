@@ -15,8 +15,16 @@ export default function App() {
 
     const [openCompare, setOpenCompare] = useState(false);
     const [waterData, setWaterData] = useState({});
-    const [baseData, setBaseData] = useState({});
-    const [compareData, setCompareData] = useState({});
+    const [baseData, setBaseData] = useState({
+        'location': 'Nederland',
+        'temp': 9,
+        'hardness': 20
+    });
+    const [compareData, setCompareData] = useState({
+        'location': 'Frankrijk',
+        'temp': 7,
+        'hardness': 24
+    });
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
@@ -41,20 +49,6 @@ export default function App() {
     function fetchWaterData() {
         // Fetch waterdata from API & setWaterData()
         console.log('Pull the data Kronk');
-
-
-        // Placeholder code:
-        setBaseData({
-            'location': 'Nederland',
-            'temp': 9,
-            'hardness': 20
-        })
-        setCompareData({
-            'location': 'Frankrijk',
-            'temp': 7,
-            'hardness': 24
-        })
-        // End of placeholder code
     }
 
     return (
@@ -64,8 +58,8 @@ export default function App() {
             </div>
             <div ref={mapContainer} className="map-container" />
 
-            <div id='open-compare' onClick={setOpenCompare(!openCompare)}>&gt;&gt;</div>
-            <Compare open={compareOpen} baseData={baseData} compareData={compareData} />
+            <div id='open-compare' onClick={() => setOpenCompare(!openCompare)}>&gt;&gt;</div>
+            <Compare open={openCompare} baseData={baseData} compareData={compareData} />
         </div>
     );
 

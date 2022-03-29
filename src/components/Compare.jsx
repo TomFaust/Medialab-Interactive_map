@@ -2,8 +2,6 @@ import '../styles/compare.scss'
 
 export function Compare({open, baseData, compareData}) {
 
-    let baseCountryContent
-
     function isEmptyObject(obj) {
         if (obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype) {
             return true
