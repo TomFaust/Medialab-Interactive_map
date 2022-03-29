@@ -21,29 +21,31 @@ export function Compare({open, baseData, compareData}) {
             )
         } else {
             return(
-                <div className='compare'>
-                    <div id="locations">
-                        <h3>{baseData.location}</h3>
-                        <h3>{compareData.location}</h3>
-                    </div>
+                <div id="bg-blur">
+                    <div className='compare'>
+                        <div id="locations">
+                            <h3>{baseData.location}</h3>
+                            <h3>{compareData.location}</h3>
+                        </div>
 
-                    <div className="stats">
-                        <div className='max-stat'>
-                            <div id='base-hardness'>{baseData.hardness}</div>
+                        <div className="stats">
+                            <div className='max-stat'>
+                                <div id='base-hardness'>{baseData.hardness}</div>
+                            </div>
+                            <p>Hardness</p>
+                            <div className='max-stat'>
+                                <div id='compare-hardness'>{compareData.hardness}</div>
+                            </div>
                         </div>
-                        <p>Hardness</p>
-                        <div className='max-stat'>
-                            <div id='compare-hardness'>{compareData.hardness}</div>
-                        </div>
-                    </div>
 
-                    <div className="stats">
-                        <div className='max-stat'>
-                            <div id='base-temp'>{baseData.temp}</div>
-                        </div>
-                        <p>Temperature</p>
-                        <div className='max-stat'>
-                            <div id='compare-temp'>{compareData.temp}</div>
+                        <div className="stats">
+                            <div className='max-stat'>
+                                <div id='base-temp'>{baseData.temp}</div>
+                            </div>
+                            <p>Temperature</p>
+                            <div className='max-stat'>
+                                <div id='compare-temp'>{compareData.temp}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
