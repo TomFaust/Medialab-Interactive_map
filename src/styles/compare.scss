@@ -1,34 +1,83 @@
 .compare{
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 0;
+    left: 15vw;
 
     display: flex;
     flex-direction: column;
+    align-items: center;
 
-    width: 30vw;
-    height: 100vh;
+    width: 70vw;
+    height: 85vh;
+    padding: 20px;
 
-    border-radius: 0 25px 25px 0;
-    border: rgba(19, 150, 211, 0.9) solid 4px;
+    border-radius: 7px 7px 0 0;
     border-left: none;
     
-    background-color: rgba(38, 179, 244, 0.9);
+    background-color: white;
 
     box-shadow: darkgray 1px 1px 10px;
 
-    h3{
-        text-align: center;
-    }
+    #locations{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
 
-    .baseCountry, .compareCountry{
-        height: 50%;
         width: 100%;
-        padding: 15px;
-    }
 
-    .compareCountry{
-        border-top: rgba(19, 150, 211, 0.9) solid 4px;
+        h3{
+            width: 40%;
+            padding-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: rgba(19, 150, 211, 0.9) solid 1px;
+        }
+    }
+    
+
+    .stats{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+        width: 100%;
+        padding: 10px 0 10px 0;
+
+        .max-stat{
+            display: flex;
+            width: 40%;
+            height: 50px;
+
+            background-color: #EBF8FD;
+            border-radius: 7px;
+
+            div{
+                width: 40%;
+                height: 100%;
+            }
+        }
+
+        .max-stat:nth-of-type(1){
+            flex-direction: row-reverse;
+
+            div{
+                background-color: #98C1D9;
+                border-radius: 25px 7px 7px 25px;
+            }
+        } 
+        
+        .max-stat:nth-of-type(2) div{
+            background-color: #98C1D9;
+            border-radius: 7px 25px 25px 7px;
+        }
+
+        p{
+            width: 20%;
+            margin: 0;
+
+            text-align: center;
+        }
     }
 
     .feedback-msg{
