@@ -11,8 +11,6 @@ import SearchIcon from './Assets/search-icon.svg'
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 export default function App() {
-
-
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(0);
@@ -201,7 +199,6 @@ export default function App() {
                     <img src={SearchIcon}/>
                 </div>
                 <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
-                {/* <CompareIcon className='compare-icon' onClick={() => setOpenCompare(!openCompare)} /> */}
             </div>
             <Compare open={openCompare} baseData={baseData} compareData={compareData} />
         </div>

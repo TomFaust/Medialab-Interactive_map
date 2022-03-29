@@ -21,7 +21,7 @@
 
     width: 70vw;
     height: 85vh;
-    padding: 20px;
+    padding: 40px;
 
     border-radius: 7px 7px 0 0;
     border-left: none;
@@ -33,12 +33,12 @@
     #locations{
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-between;
 
         width: 100%;
 
         h3{
-            width: 40%;
+            width: 43%;
             padding-bottom: 25px;
             text-align: center;
             text-transform: uppercase;
