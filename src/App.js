@@ -1,16 +1,33 @@
-import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import './styles/general.scss'
+import './styles/app.scss'
 import React, { useRef, useEffect, useState } from 'react';
+import { Compare } from './components/Compare';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 export default function App() {
 
+
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(0);
     const [lat, setLat] = useState(0);
     const [zoom, setZoom] = useState(9);
+
+    const [openCompare, setOpenCompare] = useState(false);
+    const [waterData, setWaterData] = useState({});
+    const [baseData, setBaseData] = useState({
+        'location': 'Nederland',
+        'temp': 9,
+        'hardness': 20
+    });
+    const [compareData, setCompareData] = useState({
+        'location': 'Frankrijk',
+        'temp': 7,
+        'hardness': 24
+    });
 
     useEffect(() => {
 
@@ -43,7 +60,7 @@ export default function App() {
             setZoom(parseFloat(map.current.getZoom().toFixed(2)));
         });
 
-        document.getElementsByClassName('mapboxgl-ctrl-attrib-inner')[0].remove();
+        document.getElementsByClassName('mapboxgl-control-container')[0].remove();
 
         map.current.on('load', () => {
 
@@ -156,6 +173,23 @@ export default function App() {
         );
 
     });
+        fetchWaterData()
+    }, []);
+
+    // Call this function via an onClick on the mappositions
+    function selectedData(location) {
+        // Get the waterdata belonging to the location from waterData
+
+        // Check if this is for the baseData or compareData
+        // Put the data in the correct state
+    }
+
+    function fetchWaterData() {
+        // Fetch waterdata from API & setWaterData()
+        console.log('Pull the data Kronk');
+    }
+
+
 
     return (
         <div className='container'>
