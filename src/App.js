@@ -1,10 +1,11 @@
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import React, {useRef, useEffect, useState} from 'react';
-import industry from './Assets/map-icons/industry.png'
+import React, { useRef, useEffect, useState } from 'react';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 export default function App() {
+
+
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(0);
@@ -12,6 +13,7 @@ export default function App() {
     const [zoom, setZoom] = useState(9);
 
     useEffect(() => {
+
         if (map.current) return; // initialize map only once
 
         map.current = new mapboxgl.Map({
@@ -56,7 +58,7 @@ export default function App() {
             );
 
             map.current.loadImage(
-                images['flag.png'],
+                images['industry.png'],
                 (error, image) => {
                     if (error) throw error;
 
