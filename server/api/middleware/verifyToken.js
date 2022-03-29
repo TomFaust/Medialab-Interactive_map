@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { env } from './config/globals.js';
+import { env } from '../../config/globals.js';
 
 function verifyToken(req, res, next) {
     const token = req.header('auth-token')
