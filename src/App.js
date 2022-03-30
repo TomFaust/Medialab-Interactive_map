@@ -180,23 +180,18 @@ export default function App() {
 
     // Call this function via an onClick on the mappositions
     function selectedData(location) {
-        // Get the waterdata belonging to the location from waterData
-        console.log(waterData[location]);
-        console.log(isBaseCountry);
-
+        // Check which country the user wants to change
         if (isBaseCountry){setBaseData(waterData[location])}
         else {setCompareData(waterData[location])}
-
-        // Check if this is for the baseData or compareData 
-        // Put the data in the correct state
+        
+        // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
+        setIsBaseCountry(false)
     }
 
     function fetchWaterData() {
         // Fetch waterdata from API & setWaterData()
         console.log('Pull the data Kronk');
     }
-
-    
 
     return (
         <div className='container'>
@@ -214,14 +209,13 @@ export default function App() {
                 </div>
                 <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
             </div>
-            <Compare open={openCompare} baseData={baseData} compareData={compareData} />
+            <Compare open={openCompare} baseData={baseData} compareData={compareData} setIsBaseCountry={setIsBaseCountry}/>
 
         {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
             <div className='countries'> 
                 <div onClick={()=> selectedData("NL")}> Nederland </div>
                 <div onClick={()=> selectedData("FR")}> Frankrijk </div>
                 <div onClick={()=> selectedData("DE")}> Duitsland </div>
-                <button onClick={()=> setIsBaseCountry(!isBaseCountry)}>Change side</button>
             </div>
         </div>
     );

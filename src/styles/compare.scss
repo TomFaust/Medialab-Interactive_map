@@ -43,6 +43,12 @@
             text-align: center;
             text-transform: uppercase;
             border-bottom: rgba(19, 150, 211, 0.9) solid 1px;
+            
+            img{
+                height: 23px;
+                margin-left: 5px;
+                user-select: none;
+            }
         }
     }
     

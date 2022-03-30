@@ -1,6 +1,7 @@
 import '../styles/compare.scss'
+import SwitchIcon from '../Assets/switch-icon.svg'
 
-export function Compare({open, baseData, compareData}) {
+export function Compare({open, baseData, compareData, setIsBaseCountry}) {
 
     function isEmptyObject(obj) {
         if (obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype) {
@@ -55,7 +56,7 @@ export function Compare({open, baseData, compareData}) {
                 <div id="bg-blur">
                     <div className='compare'>
                         <div id="locations">
-                            <h3>{baseData.location}</h3>
+                            <h3>{baseData.location} <img src={SwitchIcon} onClick={()=>setIsBaseCountry(true)}/> </h3> 
                             <h3>{compareData.location}</h3>
                         </div>
 
