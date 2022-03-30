@@ -61,7 +61,7 @@ router.put('/country/:id', verify, async (req, res) => {
 
     const {errorValidation} = countryValidation(req.body)
     if(errorValidation) res.status(400).send(errorValidation.details[0].message);
-
+    
     Country.findByIdAndUpdate({_id: req.params.id}, {
         name: req.body.name,
         longitude: req.body.longitude,
@@ -72,7 +72,7 @@ router.put('/country/:id', verify, async (req, res) => {
             logger.error(err)
         }
         else { 
-            res.redirect('/country/'+req.params.id);
+            res.redirect(303, '/api/country/'+req.params.id);
        }
     });
 });
