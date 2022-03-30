@@ -35,8 +35,8 @@ router.get('/country/:id', function(req, res){
 
 router.post('/country', verify, async (req, res) => {
 
-    const {error} = countryValidation(req.body)
-    if(error) res.status(400).send(error.details[0].message);
+    const {errorValidation} = countryValidation(req.body)
+    if(errorValidation) res.status(400).send(errorValidation.details[0].message);
 
     const countryrExist = await Country.findOne({name: req.body.name});
     if(countryrExist) return res.status(400).send("Country already exist");
@@ -59,8 +59,8 @@ router.post('/country', verify, async (req, res) => {
 
 router.put('/country/:id', verify, async (req, res) => {
 
-    const {error} = countryValidation(req.body)
-    if(error) res.status(400).send(error.details[0].message);
+    const {errorValidation} = countryValidation(req.body)
+    if(errorValidation) res.status(400).send(errorValidation.details[0].message);
 
     Country.findByIdAndUpdate({_id: req.params.id}, {
         name: req.body.name,
