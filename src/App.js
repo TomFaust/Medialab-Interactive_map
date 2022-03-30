@@ -18,17 +18,26 @@ export default function App() {
     const [zoom, setZoom] = useState(9);
 
     const [openCompare, setOpenCompare] = useState(false);
-    const [waterData, setWaterData] = useState({});
-    const [baseData, setBaseData] = useState({
-        'location': 'Nederland',
-        'temp': 9,
-        'hardness': 20
+    const [isBaseCountry, setIsBaseCountry] = useState(true);
+    const [waterData, setWaterData] = useState({
+        'NL': { 
+            'location': 'Nederland',
+            'temp': 9,
+            'hardness': 20
+        },   
+        'FR': { 
+            'location': 'Frankrijk',
+            'temp': 30,
+            'hardness': 15
+        },  
+        'DE': { 
+            'location': 'Duitsland',
+            'temp': 2,
+            'hardness': 10
+        }  
     });
-    const [compareData, setCompareData] = useState({
-        'location': 'Frankrijk',
-        'temp': 7,
-        'hardness': 24
-    });
+    const [baseData, setBaseData] = useState({});
+    const [compareData, setCompareData] = useState({});
 
     useEffect(() => {
 
@@ -172,6 +181,11 @@ export default function App() {
     // Call this function via an onClick on the mappositions
     function selectedData(location) {
         // Get the waterdata belonging to the location from waterData
+        console.log(waterData[location]);
+        console.log(isBaseCountry);
+
+        if (isBaseCountry){setBaseData(waterData[location])}
+        else {setCompareData(waterData[location])}
 
         // Check if this is for the baseData or compareData 
         // Put the data in the correct state
@@ -201,6 +215,14 @@ export default function App() {
                 <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
             </div>
             <Compare open={openCompare} baseData={baseData} compareData={compareData} />
+
+        {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
+            <div className='countries'> 
+                <div onClick={()=> selectedData("NL")}> Nederland </div>
+                <div onClick={()=> selectedData("FR")}> Frankrijk </div>
+                <div onClick={()=> selectedData("DE")}> Duitsland </div>
+                <button onClick={()=> setIsBaseCountry(!isBaseCountry)}>Change side</button>
+            </div>
         </div>
     );
 

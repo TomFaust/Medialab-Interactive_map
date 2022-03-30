@@ -37,5 +37,11 @@
         border-left: 1px solid #9E9E9E;
 
     }
+    
 }
-
+.countries{
+        position: absolute;
+        top: 100px;
+        left: 10px;
+        z-index: 2;
+    }
