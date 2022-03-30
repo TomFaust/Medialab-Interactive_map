@@ -1,26 +1,26 @@
 import express from 'express'
-import countryValidation from '../../validation/countryValidation.js'
-import Country from '../../../models/Country.js'
+import companyValidation from '../../validation/companyValidation.js'
+import Company from '../../../models/Company.js'
 import verify from '../../middleware/verifyToken.js'
 import logger from '../../../config/logger.js'
 
 const router = express.Router();
 
 router.param('id', function(req, res, next, id){
-    Country.findById(id, function(err, result){
+    Company.findById(id, function(err, result){
         if(err) {
             res.status(400).send(err)
             logger.error(err)
         }
         else {
-            req.countryId = result;
+            req.companyId = result;
             next();
         }
     });
 }); 
 
-router.get('/country', async (req, res) => {
-    Country.find({}, function(err, countries){
+router.get('/company', async (req, res) => {
+    Company.find({}, function(err, countries){
         if(err){
             res.status(400).send(err)
             logger.error(err)
@@ -29,27 +29,28 @@ router.get('/country', async (req, res) => {
     });
 })
 
-router.get('/country/:id', function(req, res){
-    res.json({country: req.countryId});
+router.get('/company/:id', function(req, res){
+    res.json({company: req.companyId});
 });
 
-router.post('/country', verify, async (req, res) => {
+router.post('/company', verify, async (req, res) => {
 
-    const {errorValidation} = countryValidation(req.body)
+    const {errorValidation} = companyValidation(req.body)
     if(errorValidation) res.status(400).send(errorValidation.details[0].message);
 
-    const countryrExist = await Country.findOne({name: req.body.name});
-    if(countryrExist) return res.status(400).send("Country already exist");
+    const companyExist = await Company.findOne({name: req.body.name});
+    if(companyExist) return res.status(400).send("Company already exist");
 
-    const country = new Country({
+    const company = new Company({
         name: req.body.name,
+        country: req.body.country,
         longitude: req.body.longitude,
         latitude: req.body.latitude,
     });
 
     try{
-        await country.save()
-        res.send('Country is saved');
+        await company.save()
+        res.send('Company is saved');
 
     } catch(err) {
         res.status(400).send(err)
@@ -57,13 +58,14 @@ router.post('/country', verify, async (req, res) => {
     }
   });
 
-router.put('/country/:id', verify, async (req, res) => {
+router.put('/company/:id', verify, async (req, res) => {
 
-    const {errorValidation} = countryValidation(req.body)
+    const {errorValidation} = companyValidation(req.body)
     if(errorValidation) res.status(400).send(errorValidation.details[0].message);
-    
-    Country.findByIdAndUpdate({_id: req.params.id}, {
+
+    Company.findByIdAndUpdate({_id: req.params.id}, {
         name: req.body.name,
+        country: req.body.country,
         longitude: req.body.longitude,
         latitude: req.body.latitude,
     }, function(err, result){
@@ -72,13 +74,13 @@ router.put('/country/:id', verify, async (req, res) => {
             logger.error(err)
         }
         else { 
-            res.redirect(303, '/api/country/'+req.params.id);
+            res.redirect(303, '/api/company/'+req.params.id);
        }
     });
 });
 
- router.delete('/country/:id', verify, async (req, res) => {
-    Country.findByIdAndRemove({_id: req.params.id}, 
+ router.delete('/company/:id', verify, async (req, res) => {
+    Company.findByIdAndRemove({_id: req.params.id}, 
         function(err, countries){
         if(err){ 
             res.status(400).send(err);
