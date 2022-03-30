@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-const CountrySchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+
+const CountrySchema = new Schema({
     name: { 
         type: String,
         required: true,
@@ -17,6 +19,10 @@ const CountrySchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    companies: [{
+        type: Schema.Types.ObjectId,
+        ref: "Company"
+    }],
     date: { 
         type: Date,
         default: Date.now

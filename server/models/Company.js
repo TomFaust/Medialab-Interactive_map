@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 
-const CompanySchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+
+const CompanySchema = new Schema({
     name: { 
-        type: String,
-        required: true,
-    },
-    country: {
         type: String,
         required: true,
     },
@@ -20,6 +18,10 @@ const CompanySchema = new mongoose.Schema({
     status: { 
         type: Boolean,
         required: true,
+    },
+    country: {
+        type: Schema.Types.ObjectId,
+        ref: "Country"
     },
     date: { 
         type: Date,
