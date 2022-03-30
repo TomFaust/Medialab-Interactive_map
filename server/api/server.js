@@ -3,6 +3,7 @@ import { env } from '../config/globals.js';
 
 export async function ServerConnection() {
 
+    // Options for mongoose connection
     const options = {
         useNewUrlParser: true,
         useUnifiedTopology: true

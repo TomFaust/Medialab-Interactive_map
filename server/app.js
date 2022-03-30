@@ -3,6 +3,8 @@ import cors from 'cors'
 import bodyParser from 'body-parser';
 
 import ServerConnection from './api/server.js';
+import authRoute from './api/components/auth/auth.js'
+import countryRoute from './api/components/country/routes.js'
 import {logger} from './config/logger.js';
 import { env } from './config/globals.js';
 
@@ -13,8 +15,12 @@ import { env } from './config/globals.js';
         const app = express()
 
         //Middlewares
-        app.use(cors())
         app.use(bodyParser.json());
+        app.use(cors())
+
+        //Route middlewares
+        app.use('/api/user', authRoute)
+        app.use('/api', countryRoute)
 
         ServerConnection()
 
@@ -22,10 +28,17 @@ import { env } from './config/globals.js';
             res.json('Welcome to the API')
         })
 
-        
-        app.listen(env.NODE_PORT, () => 
-        console.log(`Server is running on ${env.NODE_PORT} in ${process.env.NODE_ENV} mode`
-     ))
+
+        // Start express server
+        app.listen(env.NODE_PORT);
+
+        app.on('listening', () => {
+			    logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
+		    });
+
+         app.on('close', () => {
+          logger.info('node server closed');
+        });
 
 	} catch (err) {
 		logger.error(err.stack);

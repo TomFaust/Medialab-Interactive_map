@@ -7,6 +7,7 @@ import industry from './Assets/map-icons/industry.png'
 import CompareIcon from './Assets/compare-icon.svg'
 import MenuIcon from './Assets/menu-icon.svg'
 import SearchIcon from './Assets/search-icon.svg'
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -45,15 +46,14 @@ export default function App() {
 
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
-
+            style: 'mapbox://styles/qwinsie/cl1c8li5l000m15s1p65hoex6',
             center: [lng, lat],
             zoom: zoom
         });
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-    
+
                 map.current.jumpTo({
                     center: [
                         position.coords.longitude,
@@ -61,38 +61,38 @@ export default function App() {
                     ],
                     essential: true // this animation is considered essential with respect to prefers-reduced-motion
                 });
-    
+
             });
         }
-    
+
         map.current.on('move', () => {
             setLng(parseFloat(map.current.getCenter().lng.toFixed(4)));
             setLat(parseFloat(map.current.getCenter().lat.toFixed(4)));
             setZoom(parseFloat(map.current.getZoom().toFixed(2)));
         });
-    
-        document.getElementsByClassName('mapboxgl-control-container')[0].remove();
-    
+
+        document.getElementsByClassName('mapboxgl-ctrl-attrib-inner')[0].remove();
+
         map.current.on('load', () => {
-    
+
             const importAll = require =>
                 require.keys().reduce((acc, next) => {
                     acc[next.replace("./", "")] = require(next);
                     return acc;
                 }, {});
-    
+
             const images = importAll(
                 require.context("./Assets/map-icons", false, /\.(png|jpe?g|svg)$/)
             );
-    
+
             map.current.loadImage(
                 images['industry.png'],
                 (error, image) => {
                     if (error) throw error;
-    
+
                     // Add the image to the map style.
                     map.current.addImage('icon', image);
-    
+
                     // Add a data source containing one point feature.
                     map.current.addSource('point', {
                         'type': 'geojson',
@@ -125,7 +125,7 @@ export default function App() {
                             ]
                         }
                     });
-    
+
                     map.current.addLayer({
                         id: 'clusters',
                         type: 'circle',
@@ -138,7 +138,7 @@ export default function App() {
                             'circle-stroke-color': '#109ede',
                         }
                     });
-    
+
                     map.current.addLayer({
                         id: 'cluster-count',
                         type: 'symbol',
@@ -153,8 +153,8 @@ export default function App() {
                             "text-color": "#ffffff"
                         }
                     });
-    
-    
+
+
                     // Add a layer to use the image to represent the data.
                     map.current.addLayer({
                         'id': 'unclustered-point',
@@ -169,11 +169,19 @@ export default function App() {
                 }
             );
         })
-    
+
         map.current.on('click', 'unclustered-point', (e) => {
             const description = e.features[0].properties;
             console.log(description)
         });
+
+        map.current.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+            }),
+            'top-left'
+        );
 
         fetchWaterData()
     }, []);

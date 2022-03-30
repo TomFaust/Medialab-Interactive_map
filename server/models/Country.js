@@ -1,6 +1,6 @@
-const  mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const CountrySchema = mongoose.Schema({
+const CountrySchema = new mongoose.Schema({
     name: { 
         type: String,
         required: true,
@@ -15,66 +15,12 @@ const CountrySchema = mongoose.Schema({
     },
     status: { 
         type: Boolean,
-        required: true,
+        default: true
     },
-    temperature: { 
-        type: Number,
-        required: true,
-    },
-    hardness: { 
-        type: String,
-        required: true,
-    },
-    turbidity: { 
-        type: String,
-        required: true,
-    },
-    health: {
-        nitrate: { 
-            type: Number,
-            required: true,
-        },
-        nitrite: {
-            type: Number,
-            required: true,
-        },
-        fluoride: {
-            type: Number,
-            required: true,
-        },
-    },
-    taste: {
-        water_extraction_area: {
-            type: String,
-            required: true,
-        },
-        sulfate: {
-            type: Number,
-            required: true,
-        },
-        magnesium: {
-            type: Number,
-            required: true,
-        },
-        natrium: {
-            type: Number,
-            required: true,
-        },
-        chloride: {
-            type: Number,
-            required: true,
-        },
-        magnesiumcarbonate: {
-            type: Number,
-            required: true,
-        },
-        calciumcarbonate: {
-            type: Number,
-            required: true,
-        },
-        chloride: {
-            type: Number,
-            required: true,
-        }
+    date: { 
+        type: Date,
+        default: Date.now
     }
 })
+
+export default mongoose.model('Country', CountrySchema);
