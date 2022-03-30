@@ -81,6 +81,7 @@ const WaterProperties = new mongoose.Schema({
     taste: {
         water_extraction_area: {
             type: String,
+            enum: ['Groundwater','Surface water','Dune water'],
         },
         sulfate: {
             value: { 
