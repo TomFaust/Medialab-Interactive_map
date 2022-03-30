@@ -5,18 +5,26 @@ import verify from '../../middleware/verifyToken.js'
 
 const router = express.Router();
 
-
-router.get('/country', async (req, res) => {
-    console.log('country data')
-    Country.find({}, function(err, countries){
-        if(err){
-            console.log(err);
-        }
+router.param('id', function(req, res, next, id){
+    Country.findById(id, function(err, result){
+        if(err) res.json(err);
         else {
-            res.json(countries);
+            req.countryId = result;
+            next();
         }
     });
+}); 
+
+router.get('/country', async (req, res) => {
+    Country.find({}, function(err, countries){
+        if(err){console.log(err);}
+        else {res.json(countries);}
+    });
 })
+
+router.get('/country/:id', function(req, res){
+    res.json({country: req.countryId});
+});
 
 router.post('/country', verify, async (req, res) => {
 
@@ -39,6 +47,31 @@ router.post('/country', verify, async (req, res) => {
     } catch(err) {
         res.status(400).send(err)
     }
+  });
+
+router.put('/country/:id', verify, async (req, res) => {
+
+    const {error} = countryValidation(req.body)
+    if(error) res.status(400).send(error.details[0].message);
+
+    Country.findByIdAndUpdate({_id: req.params.id}, {
+        name: req.body.name,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
+    }, function(err, result){
+        if(err) res.status(400).send(err);
+        else { 
+            res.redirect('/country/'+req.params.id);
+       }
+    });
+});
+
+ router.delete('/country/:id', verify, async (req, res) => {
+    Country.findByIdAndRemove({_id: req.params.id}, 
+        function(err, countries){
+        if(err){ console.log(err);}
+        else { res.json(countries);}
+    })
   });
 
 
