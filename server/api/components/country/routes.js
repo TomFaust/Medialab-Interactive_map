@@ -2,12 +2,16 @@ import express from 'express'
 import countryValidation from '../../validation/countryValidation.js'
 import Country from '../../../models/Country.js'
 import verify from '../../middleware/verifyToken.js'
+import logger from '../../../config/logger.js'
 
 const router = express.Router();
 
 router.param('id', function(req, res, next, id){
     Country.findById(id, function(err, result){
-        if(err) res.json(err);
+        if(err) {
+            res.status(400).send(err)
+            logger.error(err)
+        }
         else {
             req.countryId = result;
             next();
@@ -17,7 +21,10 @@ router.param('id', function(req, res, next, id){
 
 router.get('/country', async (req, res) => {
     Country.find({}, function(err, countries){
-        if(err){console.log(err);}
+        if(err){
+            res.status(400).send(err)
+            logger.error(err)
+        }
         else {res.json(countries);}
     });
 })
@@ -46,6 +53,7 @@ router.post('/country', verify, async (req, res) => {
 
     } catch(err) {
         res.status(400).send(err)
+        logger.error(err)
     }
   });
 
@@ -59,7 +67,10 @@ router.put('/country/:id', verify, async (req, res) => {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
     }, function(err, result){
-        if(err) res.status(400).send(err);
+        if(err) {
+            res.status(400).send(err)
+            logger.error(err)
+        }
         else { 
             res.redirect('/country/'+req.params.id);
        }
@@ -69,7 +80,10 @@ router.put('/country/:id', verify, async (req, res) => {
  router.delete('/country/:id', verify, async (req, res) => {
     Country.findByIdAndRemove({_id: req.params.id}, 
         function(err, countries){
-        if(err){ console.log(err);}
+        if(err){ 
+            res.status(400).send(err);
+            logger.error(err)
+        }
         else { res.json(countries);}
     })
   });
