@@ -17,7 +17,7 @@ const CompanySchema = new Schema({
     },
     status: { 
         type: Boolean,
-        required: true,
+        default: true,
     },
     country: {
         type: Schema.Types.ObjectId,
