@@ -3,13 +3,15 @@ import './styles/app.scss'
 import React, { useRef, useEffect, useState } from 'react';
 import { Compare } from './components/Compare';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import industry from './Assets/map-icons/industry.png'
+import CompareIcon from './Assets/compare-icon.svg'
+import MenuIcon from './Assets/menu-icon.svg'
+import SearchIcon from './Assets/search-icon.svg'
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 export default function App() {
-
-
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(0);
@@ -17,17 +19,26 @@ export default function App() {
     const [zoom, setZoom] = useState(9);
 
     const [openCompare, setOpenCompare] = useState(false);
-    const [waterData, setWaterData] = useState({});
-    const [baseData, setBaseData] = useState({
-        'location': 'Nederland',
-        'temp': 9,
-        'hardness': 20
+    const [isBaseCountry, setIsBaseCountry] = useState(true);
+    const [waterData, setWaterData] = useState({
+        'NL': { 
+            'location': 'Nederland',
+            'temp': 9,
+            'hardness': 20
+        },   
+        'FR': { 
+            'location': 'Frankrijk',
+            'temp': 30,
+            'hardness': 15
+        },  
+        'DE': { 
+            'location': 'Duitsland',
+            'temp': 2,
+            'hardness': 10
+        }  
     });
-    const [compareData, setCompareData] = useState({
-        'location': 'Frankrijk',
-        'temp': 7,
-        'hardness': 24
-    });
+    const [baseData, setBaseData] = useState({});
+    const [compareData, setCompareData] = useState({});
 
     useEffect(() => {
 
@@ -177,10 +188,12 @@ export default function App() {
 
     // Call this function via an onClick on the mappositions
     function selectedData(location) {
-        // Get the waterdata belonging to the location from waterData
-
-        // Check if this is for the baseData or compareData
-        // Put the data in the correct state
+        // Check which country the user wants to change
+        if (isBaseCountry){setBaseData(waterData[location])}
+        else {setCompareData(waterData[location])}
+        
+        // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
+        setIsBaseCountry(false)
     }
 
     function fetchWaterData() {
@@ -188,14 +201,29 @@ export default function App() {
         console.log('Pull the data Kronk');
     }
 
-
-
     return (
         <div className='container'>
             <div className="sidebar">
                 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
             </div>
             <div ref={mapContainer} className="map-container">
+            </div>
+
+            <div id='menu-bar'>
+                <div id='search'>
+                    <img src={MenuIcon}/>
+                    <p>Search a country</p>
+                    <img src={SearchIcon}/>
+                </div>
+                <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
+            </div>
+            <Compare open={openCompare} baseData={baseData} compareData={compareData} setIsBaseCountry={setIsBaseCountry}/>
+
+        {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
+            <div className='countries'> 
+                <div onClick={()=> selectedData("NL")}> Nederland </div>
+                <div onClick={()=> selectedData("FR")}> Frankrijk </div>
+                <div onClick={()=> selectedData("DE")}> Duitsland </div>
             </div>
         </div>
     );
