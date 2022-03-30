@@ -1,9 +1,9 @@
 import joi from '@hapi/joi'
 
 
-function countryValidation(data) {
+function companyValidation(data) {
 
-    const schemaCountryValidation = joi.object({
+    const schemaCompanyValidation = joi.object({
         name: joi.string()
         .min(6)
         .required(),
@@ -18,7 +18,7 @@ function countryValidation(data) {
         .required(),
     })
 
-    return schemaCountryValidation.validate(data);
+    return schemaCompanyValidation.validate(data);
 }
 
-export default countryValidation
+export default companyValidation
