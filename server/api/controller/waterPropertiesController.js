@@ -44,8 +44,40 @@ const updateWaterProperties = async (req, res) => {
     Company.findByIdAndUpdate({_id: req.params.id}, {
         company: company.id,
         period: req.body.period,
-
-    }, function(err, result){
+        temperature: {
+            value: req.body.temperature
+        },
+        hardness: {
+            value: req.body.hardness
+        },
+        turbidity: {
+            value: req.body.turbidity
+        },
+        health: {
+            nitrate: {
+                value: req.body.nitrate
+            },
+            nitrite: {
+                value: req.body.nitrite
+            },
+            fluoride: {
+                value: req.body.fluoride
+            },
+        },
+        taste: {
+            water_extraction_area: req.body.water_extraction_area,
+            sulfate: {
+                value: req.body.sulfate
+            },
+            natrium: {
+                value: req.body.natrium
+            },
+            chloride: {
+                value: req.body.chloride
+            },
+        },
+    }, 
+    function(err, result){
         if(err) {
             res.status(400).send(err)
             logger.error(err)
@@ -82,6 +114,38 @@ const postWaterProperties =  async (req, res) => {
     const properties = new Properties({
         company: company.id,
         period: req.body.period,
+        temperature: {
+            value: req.body.temperature
+        },
+        hardness: {
+            value: req.body.hardness
+        },
+        turbidity: {
+            value: req.body.turbidity
+        },
+        health: {
+            nitrate: {
+                value: req.body.nitrate
+            },
+            nitrite: {
+                value: req.body.nitrite
+            },
+            fluoride: {
+                value: req.body.fluoride
+            },
+        },
+        taste: {
+            water_extraction_area: req.body.water_extraction_area,
+            sulfate: {
+                value: req.body.sulfate
+            },
+            natrium: {
+                value: req.body.natrium
+            },
+            chloride: {
+                value: req.body.chloride
+            },
+        },
     });
 
     try{
