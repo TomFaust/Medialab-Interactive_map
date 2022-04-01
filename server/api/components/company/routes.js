@@ -1,6 +1,7 @@
 import express from 'express'
 import companyValidation from '../../validation/companyValidation.js'
 import Company from '../../../models/Company.js'
+import Country from '../../../models/Country.js'
 import verify from '../../middleware/verifyToken.js'
 import logger from '../../../config/logger.js'
 
@@ -41,15 +42,24 @@ router.post('/company', verify, async (req, res) => {
     const companyExist = await Company.findOne({name: req.body.name});
     if(companyExist) return res.status(400).send("Company already exist");
 
+    const country = await Country.findOne({name: req.body.country});
+    if(!country) res.status(400).send("Country doesn't exist");
+
     const company = new Company({
         name: req.body.name,
-        country: req.body.country,
+        country: country.id,
         longitude: req.body.longitude,
         latitude: req.body.latitude,
     });
 
     try{
         await company.save()
+        Country.findByIdAndUpdate({_id: country.id},
+            { $push: { companies: company.id }}, function(err, result){
+            console.log(result)
+            console.log(company.id)
+            
+        })
         res.send('Company is saved');
 
     } catch(err) {
