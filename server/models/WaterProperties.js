@@ -95,15 +95,6 @@ const WaterProperties = new mongoose.Schema({
                 match: "mg/l"
             }
         },
-        magnesium: {
-            value: { 
-                type: Number,
-                min: 0,
-            },
-            unit: {
-                type: String,
-            }
-        },
         natrium: {
             value: { 
                 type: Number,
@@ -128,24 +119,6 @@ const WaterProperties = new mongoose.Schema({
                 match: "mg/l"
             }
         },
-        magnesiumcarbonate: {
-            value: { 
-                type: Number,
-                min: 0,
-            },
-            unit: {
-                type: String,
-            }
-        },
-        calciumcarbonate: {
-            value: { 
-                type: Number,
-                min: 0,
-            },
-            unit: {
-                type: String,
-            }
-        }
     },
     date: { 
         type: Date,
