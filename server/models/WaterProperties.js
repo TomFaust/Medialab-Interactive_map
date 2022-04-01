@@ -1,12 +1,14 @@
 const  mongoose = require("mongoose");
 
 const WaterProperties = new mongoose.Schema({
-    companyId: {
-        type: Number
+    company: {
+        type: String,
+        required: true,
     },
     period: {
         type: String,
         required: true,
+        enum: ['Q1','Q2','Q3', 'Q4'],
     },
     temperature: { 
         value: { 
