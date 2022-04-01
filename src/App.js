@@ -72,6 +72,7 @@ export default function App() {
         });
 
         document.getElementsByClassName('mapboxgl-ctrl-attrib-inner')[0].remove();
+        document.querySelector('[aria-label="Mapbox logo"]').remove();
 
         map.current.on('load', () => {
 
