@@ -24,17 +24,17 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
 
             // Handle all the Numbers
             if (typeof baseData[properties] == 'number') {
-                let baseLength = baseData[properties]
-                let compareLength = compareData[properties]
+                let baseLength = (baseData[properties].value * 100) / baseData[properties].max
+                let compareLength = (compareData[properties].value * 100) / compareData[properties].max
 
                 divs.push(
                     <div className="stats" key={index}>
                         <div className='max-stat'>
-                            <div style={{width: baseLength+'%'}}>{baseData[properties]}</div>
+                            <div style={{width: baseLength+'%'}}>{baseData[properties].value}</div>
                         </div>
                         <p>{properties}</p>
                         <div className='max-stat'>
-                            <div style={{width: compareLength+'%'}}>{compareData[properties]}</div>
+                            <div style={{width: compareLength+'%'}}>{compareData[properties].value}</div>
                         </div>
                     </div>
                 )
@@ -44,15 +44,15 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
             if (typeof baseData[properties] == 'string') {
                 divs.push(
                     <div className="stats" key={index}>
-                        <div className='max-stat'>{baseData[properties]}</div>
+                        <div className='max-stat'>{baseData[properties].value}</div>
                         <p>{properties}</p>
-                        <div className='max-stat'>String: {compareData[properties]}</div>
+                        <div className='max-stat'>String: {compareData[properties].value}</div>
                     </div>
                 )
             }
 
             // Handle health and taste
-            if (baseData[properties] === 'health' || baseData[properties] === 'taste') {
+            if (properties === 'health' || properties === 'taste') {
                 let childDivs = []
 
                 childDivs.push(
@@ -63,25 +63,25 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                 for (const childProps in baseData[properties]) {
                     
                     // Handle numbers
-                    if (typeof baseData[properties][childProps] == 'number') {
-                        let baseLength = baseData[properties][childProps]
-                        let compareLength = compareData[properties][childProps]
-                        
+                    if (typeof childProps == 'number') {
+                        let baseLength = (baseData[properties][childProps].value * 100) / baseData[properties][childProps].max
+                        let compareLength = (compareData[properties][childProps].value * 100) / compareData[properties][childProps].max
+
                         childDivs.push(
                             <div className="stats" key={index}>
                                 <div className='max-stat'>
-                                    <div style={{width: baseLength+'%'}}>{baseData[properties][childProps]}</div>
+                                    <div style={{width: baseLength+'%'}}>{baseData[properties][childProps].value}</div>
                                 </div>
                                 <p>{properties}</p>
                                 <div className='max-stat'>
-                                    <div style={{width: compareLength+'%'}}>{compareData[properties][childProps]}</div>
+                                    <div style={{width: compareLength+'%'}}>{compareData[properties][childProps].value}</div>
                                 </div>
                             </div>
                         )
                     }
 
                     // Handle strings
-                    if (typeof baseData[properties][childProps] == 'string') {
+                    if (typeof childProps == 'string') {
                         divs.push(
                             <div className="stats" key={index}>
                                 <div className='max-stat'>{baseData[properties]}</div>
