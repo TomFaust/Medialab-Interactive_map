@@ -36,7 +36,7 @@ const WaterProperties = new mongoose.Schema({
             match: 2,
         }
     }],
-    turbidity: { 
+    turbidity: [{ 
         value: { 
             type: Number,
             min: 0,
@@ -51,9 +51,9 @@ const WaterProperties = new mongoose.Schema({
             type: Number,
             match: 4,
         }
-    },
-    health: {
-        nitrate: {
+    }],
+    health: [{
+        nitrate: [{
             value: { 
                 type: Number,
                 min: 0,
@@ -68,8 +68,8 @@ const WaterProperties = new mongoose.Schema({
                 type: Number,
                 match: 50,
             }
-        },
-        nitrite: {
+        }],
+        nitrite: [{
             value: { 
                 type: Number,
                 min: 0,
@@ -84,8 +84,8 @@ const WaterProperties = new mongoose.Schema({
                 type: Number,
                 match: 0.1,
             }
-        },
-        fluoride: {
+        }],
+        fluoride: [{
             value: { 
                 type: Number,
                 min: 0,
@@ -100,14 +100,14 @@ const WaterProperties = new mongoose.Schema({
                 type: Number,
                 match: 1.1,
             }
-        },
-    },
-    taste: {
+        }],
+    }],
+    taste: [{
         water_extraction_area: {
             type: String,
             enum: ['Groundwater','Surface water','Dune water'],
         },
-        sulfate: {
+        sulfate: [{
             value: { 
                 type: Number,
                 min: 0,
@@ -122,8 +122,8 @@ const WaterProperties = new mongoose.Schema({
                 type: Number,
                 match: 150,
             }
-        },
-        natrium: {
+        }],
+        natrium: [{
             value: { 
                 type: Number,
                 min: 0,
@@ -138,8 +138,8 @@ const WaterProperties = new mongoose.Schema({
                 type: Number,
                 match: 150,
             }
-        },
-        chloride: {
+        }],
+        chloride: [{
             value: { 
                 type: Number,
                 min: 0,
@@ -154,8 +154,8 @@ const WaterProperties = new mongoose.Schema({
                 type: Number,
                 match: 150,
             }
-        },
-    },
+        }],
+    }],
     date: { 
         type: Date,
         default: Date.now
