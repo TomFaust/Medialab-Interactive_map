@@ -72,6 +72,7 @@ export default function App() {
         });
 
         document.getElementsByClassName('mapboxgl-ctrl-attrib-inner')[0].remove();
+        document.querySelector('[aria-label="Mapbox logo"]').remove();
 
         map.current.on('load', () => {
 
@@ -172,16 +173,18 @@ export default function App() {
 
         map.current.on('click', 'unclustered-point', (e) => {
             const description = e.features[0].properties;
+
+
             console.log(description)
         });
 
-        map.current.addControl(
-            new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                mapboxgl: mapboxgl
-            }),
-            'top-left'
-        );
+        // map.current.addControl(
+        //     new MapboxGeocoder({
+        //         accessToken: mapboxgl.accessToken,
+        //         mapboxgl: mapboxgl
+        //     }),
+        //     'top-left'
+        // );
 
         fetchWaterData()
     }, []);
@@ -202,7 +205,7 @@ export default function App() {
     }
 
     return (
-        <div className='container'>
+        <div>
             <div className="sidebar">
                 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
             </div>
