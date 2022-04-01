@@ -7,7 +7,8 @@ function WaterPropertiesValidation(data) {
         company: joi.string()
         .required(),
         period: joi.string()
-        .required(),
+        .required()
+        .valid('Q1','Q2','Q3', 'Q4'),
         temperature: [{
             value: joi.number()
             .min(0)

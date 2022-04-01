@@ -25,7 +25,7 @@ const WaterProperties = new Schema({
         },
         maxValue: {
             type: Number,
-            match: 25,
+            default: 25,
         }
     }],
     hardness: [{ 
@@ -41,7 +41,7 @@ const WaterProperties = new Schema({
         },
         maxValue: {
             type: Number,
-            match: 2,
+            default: 2,
         }
     }],
     turbidity: [{ 
@@ -57,7 +57,7 @@ const WaterProperties = new Schema({
         },
         maxValue: {
             type: Number,
-            match: 4,
+            default: 4,
         }
     }],
     health: [{
@@ -74,7 +74,7 @@ const WaterProperties = new Schema({
             },
             maxValue: {
                 type: Number,
-                match: 50,
+                default: 50,
             }
         }],
         nitrite: [{
@@ -90,7 +90,7 @@ const WaterProperties = new Schema({
             },
             maxValue: {
                 type: Number,
-                match: 0.1,
+                default: 0.1,
             }
         }],
         fluoride: [{
@@ -106,7 +106,7 @@ const WaterProperties = new Schema({
             },
             maxValue: {
                 type: Number,
-                match: 1.1,
+                default: 1.1,
             }
         }],
     }],
@@ -128,7 +128,7 @@ const WaterProperties = new Schema({
             },
             maxValue: {
                 type: Number,
-                match: 150,
+                default: 150,
             }
         }],
         natrium: [{
@@ -144,7 +144,7 @@ const WaterProperties = new Schema({
             },
             maxValue: {
                 type: Number,
-                match: 150,
+                default: 150,
             }
         }],
         chloride: [{
@@ -160,7 +160,7 @@ const WaterProperties = new Schema({
             },
             maxValue: {
                 type: Number,
-                match: 150,
+                default: 150,
             }
         }],
     }],
