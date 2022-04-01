@@ -19,7 +19,7 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
         // Loop through all the properties
         for (const properties in baseData) {
             // Excluded properties: 'location'
-            if (properties !== 'location') {
+            if (properties !== 'location' || properties !== 'companies' || properties !== 'date' || properties !== 'name'  || properties !== 'status' || properties !== '_v' || properties !== '_id') {
                 let baseLength = baseData[properties]
                 let compareLength = compareData[properties]
 
@@ -56,8 +56,8 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                 <div id="bg-blur">
                     <div className='compare'>
                         <div id="locations">
-                            <h3>{baseData.location} <img src={SwitchIcon} onClick={()=>setIsBaseCountry(true)}/> </h3> 
-                            <h3>{compareData.location}</h3>
+                            <h3>{baseData.name} <img src={SwitchIcon} onClick={()=>setIsBaseCountry(true)}/> </h3> 
+                            <h3>{compareData.name}</h3>
                         </div>
 
                         {statsDivs()}

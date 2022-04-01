@@ -18,6 +18,7 @@ export default function App() {
     const [lat, setLat] = useState(0);
     const [zoom, setZoom] = useState(9);
 
+    const [countries, setCountries] = useState({})
     const [openCompare, setOpenCompare] = useState(false);
     const [isBaseCountry, setIsBaseCountry] = useState(true);
     const [waterData, setWaterData] = useState({
@@ -183,22 +184,50 @@ export default function App() {
             'top-left'
         );
 
-        fetchWaterData()
+        fetchCountries()
+        // fetchWaterData()
     }, []);
 
     // Call this function via an onClick on the mappositions
     function selectedData(location) {
+        let selectedCountry = countries.find(obj => {
+            return obj.name === location
+        }) 
+        console.log(selectedCountry._id);
         // Check which country the user wants to change
-        if (isBaseCountry){setBaseData(waterData[location])}
-        else {setCompareData(waterData[location])}
+        if (isBaseCountry){setBaseData(fetchWaterData(selectedCountry._id))}
+        else {setCompareData(fetchWaterData(selectedCountry._id))}
         
         // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
         setIsBaseCountry(false)
     }
 
-    function fetchWaterData() {
+    async function fetchWaterData(id) {
         // Fetch waterdata from API & setWaterData()
-        console.log('Pull the data Kronk');
+        console.log('Pull the water Kronk');
+        console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/country/' + id);
+
+        let data
+        await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/country/' + id)
+            .then((res) => res.json())
+            .then((json) => data = json)
+            .then((json) => console.log(json))
+
+        console.log(data.country);
+        return data.country
+    }
+    
+    async function fetchCountries() {
+        console.log('Pull the countries Kronk');
+        console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/country');
+
+        let data
+        await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/country')
+            .then((res) => res.json())
+            .then((json) => data = json)
+
+        console.log(data);
+        setCountries(data)
     }
 
     return (
@@ -221,9 +250,9 @@ export default function App() {
 
         {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
             <div className='countries'> 
-                <div onClick={()=> selectedData("NL")}> Nederland </div>
-                <div onClick={()=> selectedData("FR")}> Frankrijk </div>
-                <div onClick={()=> selectedData("DE")}> Duitsland </div>
+                <div onClick={()=> selectedData("Belgium")}> Belgium </div>
+                <div onClick={()=> selectedData("Spain")}> Spain </div>
+                {/* <div onClick={()=> selectedData("DE")}> Duitsland </div> */}
             </div>
         </div>
     );
