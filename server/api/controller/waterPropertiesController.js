@@ -34,9 +34,17 @@ const updateWaterProperties = async (req, res) => {
     const {errorValidation} = PropertiesValidation(req.body)
     if(errorValidation) res.status(400).send(errorValidation.details[0].message);
 
+    const company = await Company.findOne({name: req.body.company}).populate('waterProperties');
+    if(!company) res.status(400).send("Company doesn't exist");
+
+    const period = company?.waterProperties
+    const periodExist = await period.find(element => element.period === req.body.period);
+    if(periodExist) return res.status(400).send("Period already exist");
+
     Company.findByIdAndUpdate({_id: req.params.id}, {
-        name: req.body.name,
-        country: req.body.country,
+        company: company.id,
+        period: req.body.period,
+
     }, function(err, result){
         if(err) {
             res.status(400).send(err)
@@ -67,7 +75,7 @@ const postWaterProperties =  async (req, res) => {
     const company = await Company.findOne({name: req.body.company}).populate('waterProperties');
     if(!company) res.status(400).send("Company doesn't exist");
 
-    const period = company.waterProperties
+    const period = company?.waterProperties
     const periodExist = await period.find(element => element.period === req.body.period);
     if(periodExist) return res.status(400).send("Period already exist");
 
@@ -79,10 +87,7 @@ const postWaterProperties =  async (req, res) => {
     try{
         await properties.save()
         Company.findByIdAndUpdate({_id: company.id},
-            { $push: { waterProperties: properties.id }}, function(err, result){
-            console.log(result)
-            console.log(properties.id)
-            
+            { $push: { waterProperties: properties.id }}, function(err, result){    
         })
         res.send('Water properties is saved');
 
