@@ -18,8 +18,8 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
 
         // Loop through all the properties
         for (const properties in baseData) {
-            // Excluded properties: 'location'
-            if (properties !== 'location' || properties !== 'companies' || properties !== 'date' || properties !== 'name'  || properties !== 'status' || properties !== '_v' || properties !== '_id') {
+            // Excluded properties: 'name'
+            if (properties !== 'name') {
                 let baseLength = baseData[properties]
                 let compareLength = compareData[properties]
 
