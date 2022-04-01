@@ -4,6 +4,10 @@ const WaterProperties = new mongoose.Schema({
     companyId: {
         type: Number
     },
+    period: {
+        type: String,
+        required: true,
+    },
     temperature: { 
         type: Number,
     },
