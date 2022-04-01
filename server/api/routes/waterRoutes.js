@@ -7,13 +7,13 @@ const router = express.Router();
 router.param("id", WaterPropertiesController.getId)   
 
 router
-    .route('/country').get(WaterPropertiesController.getAllWaterProperties)
+    .route('/water-properties').get(WaterPropertiesController.getAllWaterProperties)
   
 router
-    .route('/country').post(verify, WaterPropertiesController.postWaterProperties)    
+    .route('/water-properties').post(verify, WaterPropertiesController.postWaterProperties)    
   
 router
-    .route('/country/:id')
+    .route('/water-properties/:id')
     .get(WaterPropertiesController.getWaterProperties)
     .put(verify, WaterPropertiesController.updateWaterProperties)
     .delete(verify, WaterPropertiesController.deleteWaterProperties) 
