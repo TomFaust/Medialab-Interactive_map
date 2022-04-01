@@ -61,11 +61,12 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                 
 
                 for (const childProps in baseData[properties]) {
-                    let baseLength = baseData[properties][childProps]
-                    let compareLength = compareData[properties][childProps]
                     
                     // Handle numbers
                     if (typeof baseData[properties][childProps] == 'number') {
+                        let baseLength = baseData[properties][childProps]
+                        let compareLength = compareData[properties][childProps]
+                        
                         childDivs.push(
                             <div className="stats" key={index}>
                                 <div className='max-stat'>
