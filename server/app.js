@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import ServerConnection from './api/server.js';
 import authRoute from './api/components/auth/auth.js'
 import countryRoute from './api/components/country/routes.js'
+import companyRoute from './api/components/company/routes.js'
 import {logger} from './config/logger.js';
 import { env } from './config/globals.js';
 
@@ -21,6 +22,7 @@ import { env } from './config/globals.js';
         //Route middlewares
         app.use('/api/user', authRoute)
         app.use('/api', countryRoute)
+        app.use('/api', companyRoute)
 
         ServerConnection()
 
