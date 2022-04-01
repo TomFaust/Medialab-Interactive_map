@@ -16,7 +16,7 @@ router.param('id', function(req, res, next, id){
             req.countryId = result;
             next();
         }
-    });
+    }).populate("companies")
 }); 
 
 router.get('/country', async (req, res) => {
@@ -25,8 +25,10 @@ router.get('/country', async (req, res) => {
             res.status(400).send(err)
             logger.error(err)
         }
-        else {res.json(countries);}
-    });
+        else {
+            res.json(countries);
+        }
+    }).populate("companies")
 })
 
 router.get('/country/:id', function(req, res){
