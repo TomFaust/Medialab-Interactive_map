@@ -9,47 +9,120 @@ const WaterProperties = new mongoose.Schema({
         required: true,
     },
     temperature: { 
-        type: Number,
+        value: { 
+            type: Number,
+            min: 0,
+            max: 25
+        },
+        unit: {
+            type: String,
+            default: "Celsius",
+            match: "Celsius"
+        }
     },
     hardness: { 
-        type: String,
+        value: { 
+            type: Number,
+            min: 1.0,
+            max: 2
+        },
+        unit: {
+            type: String,
+            default: "mmol/l",
+            match: "mmol/l"
+        },
     },
     turbidity: { 
-        type: String,
+        value: { 
+            type: Number,
+            min: 0,
+            max: 4
+        },
+        unit: {
+            type: String,
+            default: "FTE",
+            match: "FTE"
+        }
     },
     health: {
-        nitrate: { 
-            type: Number,
+        nitrate: {
+            value: { 
+                type: Number,
+                min: 0,
+                max: 50
+            },
+            unit: {
+                type: String,
+                default: "mg/l",
+                match: "mg/l"
+            }
         },
         nitrite: {
-            type: Number,
+            value: { 
+                type: Number,
+                min: 0,
+                max: 0.1
+            },
+            unit: {
+                type: String,
+                default: "mg/l",
+                match: "mg/l"
+            }
         },
         fluoride: {
-            type: Number,
+            value: { 
+                type: Number,
+                min: 0,
+                max: 1.1
+            },
+            unit: {
+                type: String,
+                default: "mg/l",
+                match: "mg/l"
+            }
         },
     },
     taste: {
         water_extraction_area: {
             type: String,
+            enum: ['Groundwater','Surface water','Dune water'],
         },
         sulfate: {
-            type: Number,
-        },
-        magnesium: {
-            type: Number,
+            value: { 
+                type: Number,
+                min: 0,
+                max: 150
+            },
+            unit: {
+                type: String,
+                default: "mg/l",
+                match: "mg/l"
+            }
         },
         natrium: {
-            type: Number,
+            value: { 
+                type: Number,
+                min: 0,
+                max: 150
+            },
+            unit: {
+                type: String,
+                default: "mg/l",
+                match: "mg/l"
+            }
         },
         chloride: {
-            type: Number,
+            value: { 
+                type: Number,
+                min: 0,
+                max: 150
+            },
+            unit: {
+                type: String,
+                default: "mg/l",
+                match: "mg/l"
+            }
         },
-        magnesiumcarbonate: {
-            type: Number,
-        },
-        calciumcarbonate: {
-            type: Number,
-        }
     },
     date: { 
         type: Date,
