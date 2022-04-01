@@ -16,12 +16,18 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
         let divs = []
         let index = 0
 
+
         // Loop through all the properties
         for (const properties in baseData) {
+            console.log(properties + ': ' + compareData[properties]);
             // Excluded properties: 'name'
-            if (properties !== 'name') {
+
+            // Handle all the Numbers
+            if (typeof baseData[properties] == 'number') {
                 let baseLength = baseData[properties]
                 let compareLength = compareData[properties]
+
+                console.log(baseLength);
 
                 divs.push(
                     <div className="stats" key={index}>
@@ -32,6 +38,17 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                         <div className='max-stat'>
                             <div style={{width: compareLength+'%'}}>{compareData[properties]}</div>
                         </div>
+                    </div>
+                )
+            }
+
+            // Handle all the Strings
+            if (typeof baseData[properties] == 'string') {
+                divs.push(
+                    <div className="stats" key={index}>
+                        <div className='max-stat'>{baseData[properties]}</div>
+                        <p>{properties}</p>
+                        <div className='max-stat'>String: {compareData[properties]}</div>
                     </div>
                 )
             }
