@@ -1,9 +1,11 @@
-const  mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const WaterProperties = new mongoose.Schema({
+const Schema = mongoose.Schema
+
+const WaterProperties = new Schema({
     company: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "Company"
     },
     period: {
         type: String,
@@ -168,4 +170,4 @@ const WaterProperties = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Properties',WaterProperties);
+export default mongoose.model('Properties',WaterProperties);

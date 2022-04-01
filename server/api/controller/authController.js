@@ -1,15 +1,12 @@
-import express from 'express'
-import User from '../../../models/User.js'
+import User from '../../models/User.js'
 import jwt from 'jsonwebtoken'
-import {registerValidation, loginValidation} from '../../validation/userValidation.js'
+import {registerValidation, loginValidation} from '../validation/userValidation.js'
 import bcrypt from 'bcryptjs';
-import { env } from '../../../config/globals.js';
-
-const router = express.Router();
+import { env } from '../../config/globals.js';
 
 
-router.post('/register', async (req, res) => {
-
+const postRegister = async function(req, res){
+   
     //validation data
     const {error} = registerValidation(req.body)
     if(error) res.status(400).send(error.details[0].message);
@@ -35,10 +32,9 @@ router.post('/register', async (req, res) => {
     } catch(err) {
         res.status(400).send(err)
     }
-})
+};
 
-router.post('/login', async (req, res) => {
-
+const postLogin = async function(req, res){
      //validation data
      const {error} = loginValidation(req.body)
      if(error) res.status(400).send(error.details[0].message);
@@ -54,7 +50,10 @@ router.post('/login', async (req, res) => {
     //Create and assign a token
     const token = jwt.sign({_id: user._id}, env.LOGIN_TOKEN)
     await res.header('auth-token', token).send(token)
-})
+};
 
 
-export default router
+export default {
+    postRegister,
+    postLogin,
+}
