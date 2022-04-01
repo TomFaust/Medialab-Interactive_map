@@ -4,7 +4,7 @@ const WaterProperties = new mongoose.Schema({
     companyId: {
         type: Number
     },
-    temperature: { 
+    temperature: [{ 
         value: { 
             type: Number,
             min: 0,
@@ -14,9 +14,13 @@ const WaterProperties = new mongoose.Schema({
             type: String,
             default: "Celsius",
             match: "Celsius"
+        },
+        maxValue: {
+            type: Number,
+            match: 25,
         }
-    },
-    hardness: { 
+    }],
+    hardness: [{ 
         value: { 
             type: Number,
             min: 1.0,
@@ -27,7 +31,11 @@ const WaterProperties = new mongoose.Schema({
             default: "mmol/l",
             match: "mmol/l"
         },
-    },
+        maxValue: {
+            type: Number,
+            match: 2,
+        }
+    }],
     turbidity: { 
         value: { 
             type: Number,
@@ -38,6 +46,10 @@ const WaterProperties = new mongoose.Schema({
             type: String,
             default: "FTE",
             match: "FTE"
+        },
+        maxValue: {
+            type: Number,
+            match: 4,
         }
     },
     health: {
@@ -51,6 +63,10 @@ const WaterProperties = new mongoose.Schema({
                 type: String,
                 default: "mg/l",
                 match: "mg/l"
+            },
+            maxValue: {
+                type: Number,
+                match: 50,
             }
         },
         nitrite: {
@@ -63,6 +79,10 @@ const WaterProperties = new mongoose.Schema({
                 type: String,
                 default: "mg/l",
                 match: "mg/l"
+            },
+            maxValue: {
+                type: Number,
+                match: 0.1,
             }
         },
         fluoride: {
@@ -75,6 +95,10 @@ const WaterProperties = new mongoose.Schema({
                 type: String,
                 default: "mg/l",
                 match: "mg/l"
+            },
+            maxValue: {
+                type: Number,
+                match: 1.1,
             }
         },
     },
@@ -93,6 +117,10 @@ const WaterProperties = new mongoose.Schema({
                 type: String,
                 default: "mg/l",
                 match: "mg/l"
+            },
+            maxValue: {
+                type: Number,
+                match: 150,
             }
         },
         natrium: {
@@ -105,6 +133,10 @@ const WaterProperties = new mongoose.Schema({
                 type: String,
                 default: "mg/l",
                 match: "mg/l"
+            },
+            maxValue: {
+                type: Number,
+                match: 150,
             }
         },
         chloride: {
@@ -117,6 +149,10 @@ const WaterProperties = new mongoose.Schema({
                 type: String,
                 default: "mg/l",
                 match: "mg/l"
+            },
+            maxValue: {
+                type: Number,
+                match: 150,
             }
         },
     },
