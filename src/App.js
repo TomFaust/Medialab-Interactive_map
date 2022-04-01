@@ -21,23 +21,6 @@ export default function App() {
     const [countries, setCountries] = useState({})
     const [openCompare, setOpenCompare] = useState(false);
     const [isBaseCountry, setIsBaseCountry] = useState(true);
-    const [waterData, setWaterData] = useState({
-        'NL': { 
-            'location': 'Nederland',
-            'temp': 9,
-            'hardness': 20
-        },   
-        'FR': { 
-            'location': 'Frankrijk',
-            'temp': 30,
-            'hardness': 15
-        },  
-        'DE': { 
-            'location': 'Duitsland',
-            'temp': 2,
-            'hardness': 10
-        }  
-    });
     const [baseData, setBaseData] = useState({});
     const [compareData, setCompareData] = useState({});
 
@@ -185,18 +168,19 @@ export default function App() {
         );
 
         fetchCountries()
-        // fetchWaterData()
     }, []);
 
     // Call this function via an onClick on the mappositions
-    function selectedData(location) {
+    async function selectedData(location) {
+        // Get the selected country data 
         let selectedCountry = countries.find(obj => {
             return obj.name === location
         }) 
-        console.log(selectedCountry._id);
+        // console.log(selectedCountry._id);
+
         // Check which country the user wants to change
-        if (isBaseCountry){setBaseData(fetchWaterData(selectedCountry._id))}
-        else {setCompareData(fetchWaterData(selectedCountry._id))}
+        if (isBaseCountry){setBaseData(await fetchWaterData(selectedCountry._id))}
+        else {setCompareData(await fetchWaterData(selectedCountry._id))}
         
         // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
         setIsBaseCountry(false)
@@ -211,9 +195,8 @@ export default function App() {
         await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/country/' + id)
             .then((res) => res.json())
             .then((json) => data = json)
-            .then((json) => console.log(json))
 
-        console.log(data.country);
+        // console.log(data.country);
         return data.country
     }
     
@@ -226,7 +209,6 @@ export default function App() {
             .then((res) => res.json())
             .then((json) => data = json)
 
-        console.log(data);
         setCountries(data)
     }
 
@@ -248,11 +230,10 @@ export default function App() {
             </div>
             <Compare open={openCompare} baseData={baseData} compareData={compareData} setIsBaseCountry={setIsBaseCountry}/>
 
-        {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
+            {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
             <div className='countries'> 
                 <div onClick={()=> selectedData("Belgium")}> Belgium </div>
                 <div onClick={()=> selectedData("Spain")}> Spain </div>
-                {/* <div onClick={()=> selectedData("DE")}> Duitsland </div> */}
             </div>
         </div>
     );
