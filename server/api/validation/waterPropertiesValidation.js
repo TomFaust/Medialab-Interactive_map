@@ -11,58 +11,47 @@ function WaterPropertiesValidation(data) {
         .required()
         .lowercase({ force: true })
         .valid('q1','q2','q3', 'q4'),
-        temperature: [{
-            value: joi.number()
+        temperature: joi.number()
             .min(0)
             .max(25)
-        }],
-        hardness: [{
-            value: joi.number()
+        ,
+        hardness: 
+            joi.number()
             .min(1.1)
             .max(2)
-        }],
-        turbidity: [{
-            value: joi.number()
+        ,
+        turbidity: 
+            joi.number()
             .min(0)
             .max(4)
-        }],
-        health: [{
-            nitrate: [{
-                value: joi.number()
+        ,
+        nitrate:  joi.number()
                 .min(0)
                 .max(50)
-            }],
-            nitrite: [{
-                value: joi.number()
+        ,
+        nitrite: joi.number()
                 .min(0)
                 .max(0.1)
-            }],
-            fluoride: [{
-                value: joi.number()
+        ,
+        fluoride: joi.number()
                 .min(0)
                 .max(1.1)
-            }],
-        }],
-        taste: [{
-            water_extraction_area: joi.string()
+        ,
+        water_extraction_area: joi.string()
             .lowercase({ force: true })
             .valid('groundwater','surface water','dune water'),
-            sulfate: [{
-                value: joi.number()
+        sulfate: joi.number()
                 .min(0)
                 .max(150)
-            }],
-            natrium: [{
-                value: joi.number()
+        ,
+        natrium: joi.number()
                 .min(0)
                 .max(150)
-            }],
-            chloride: [{
-                value: joi.number()
+         ,
+        chloride: joi.number()
                 .min(0)
                 .max(150)
-            }],
-        }],
+        ,
     })
 
     return schemaWaterPropertiesValidation.validate(data);
