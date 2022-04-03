@@ -13,7 +13,7 @@ const WaterProperties = new Schema({
         enum: ['Q1','Q2','Q3', 'Q4'],
     },
     temperature: [{ 
-        value: { 
+        value: {
             type: Number,
             min: 0,
             max: 25
@@ -21,7 +21,6 @@ const WaterProperties = new Schema({
         unit: {
             type: String,
             default: "Celsius",
-            match: "Celsius"
         },
         maxValue: {
             type: Number,
@@ -37,7 +36,6 @@ const WaterProperties = new Schema({
         unit: {
             type: String,
             default: "mmol/l",
-            match: "mmol/l"
         },
         maxValue: {
             type: Number,
@@ -53,7 +51,6 @@ const WaterProperties = new Schema({
         unit: {
             type: String,
             default: "FTE",
-            match: "FTE"
         },
         maxValue: {
             type: Number,
@@ -70,7 +67,6 @@ const WaterProperties = new Schema({
             unit: {
                 type: String,
                 default: "mg/l",
-                match: "mg/l"
             },
             maxValue: {
                 type: Number,
@@ -86,7 +82,6 @@ const WaterProperties = new Schema({
             unit: {
                 type: String,
                 default: "mg/l",
-                match: "mg/l"
             },
             maxValue: {
                 type: Number,
@@ -102,7 +97,6 @@ const WaterProperties = new Schema({
             unit: {
                 type: String,
                 default: "mg/l",
-                match: "mg/l"
             },
             maxValue: {
                 type: Number,
@@ -124,7 +118,6 @@ const WaterProperties = new Schema({
             unit: {
                 type: String,
                 default: "mg/l",
-                match: "mg/l"
             },
             maxValue: {
                 type: Number,
@@ -140,7 +133,6 @@ const WaterProperties = new Schema({
             unit: {
                 type: String,
                 default: "mg/l",
-                match: "mg/l"
             },
             maxValue: {
                 type: Number,
@@ -156,7 +148,6 @@ const WaterProperties = new Schema({
             unit: {
                 type: String,
                 default: "mg/l",
-                match: "mg/l"
             },
             maxValue: {
                 type: Number,
