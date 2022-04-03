@@ -24,7 +24,6 @@ import { env } from './config/globals.js';
         app.use('/api/user', authRoute)
         app.use('/api', countryRoute)
         app.use('/api', companyRoute)
-        app.use('/api', waterRoute)
 
         ServerConnection()
 
