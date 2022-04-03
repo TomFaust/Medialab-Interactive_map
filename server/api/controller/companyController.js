@@ -13,17 +13,17 @@ const getId = async function(req, res, next, id){
             req.companyId = result;
             next();
         }
-    });
+    }).populate('waterProperties')
 }; 
 
 const getAllCompany = async function(req, res){
-    Company.find({}, function(err, countries){
+    await Company.find({}, function(err, countries){
         if(err){
             res.status(400).send(err)
             logger.error(err)
         }
         else {res.json(countries);}
-    }).populate("waterProperties");
+    }).populate("waterProperties", "id, period")
 };
 
 const getCompany = async function(req, res){
@@ -31,9 +31,8 @@ const getCompany = async function(req, res){
 };
 
 const updateCompany = async (req, res) => {
-
-    const {errorValidation} = companyValidation(req.body)
-    if(errorValidation) res.status(400).send(errorValidation.details[0].message);
+    const validated = await companyValidation(req.body)
+    if(validated?.error) res.status(400).send(validated.error.details[0].message);
 
     const companyExist = await Company.findOne({name: req.body.name});
     if(companyExist) return res.status(400).send("Company already exist");
@@ -42,10 +41,10 @@ const updateCompany = async (req, res) => {
     if(!country) res.status(400).send("Country doesn't exist");
 
     Company.findByIdAndUpdate({_id: req.params.id}, {
-        name: req.body.name,
+        name: validated.value.name,
         country: country.id,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
+        longitude: validated.value.longitude,
+        latitude: validated.value.latitude,
     }, function(err, result){
         if(err) {
             res.status(400).send(err)

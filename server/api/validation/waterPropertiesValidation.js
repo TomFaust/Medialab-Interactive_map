@@ -5,8 +5,8 @@ function WaterPropertiesValidation(data) {
 
     const schemaWaterPropertiesValidation = joi.object({
         company: joi.string()
-        .lowercase({ force: true })
-        .required(),
+        .required()
+        .lowercase({ force: true }),
         period: joi.string()
         .required()
         .lowercase({ force: true })
