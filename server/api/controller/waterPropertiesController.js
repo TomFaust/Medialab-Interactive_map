@@ -39,8 +39,8 @@ const updateWaterProperties = async (req, res) => {
 
     const period = company?.waterProperties
     const periodExist = await period.find(element => element.period === req.body.period);
-    if(periodExist) return res.status(400).send("Period already exist");
-
+    if(!periodExist) return res.status(400).send("Period doesn't exist");
+    
     Company.findByIdAndUpdate({_id: req.params.id}, {
         company: company.id,
         period: req.body.period,
