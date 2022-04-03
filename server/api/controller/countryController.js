@@ -61,16 +61,16 @@ const deleteCountry =  async (req, res) => {
 
 
 const postCountry =  async (req, res) => {
-    const {errorValidation} = countryValidation(req.body)
-    if(errorValidation) res.status(400).send(errorValidation.details[0].message);
+    const validated = await countryValidation(req.body)
+    if(validated?.error) res.status(400).send(validated.error.details[0].message);
 
-    const countryrExist = await Country.findOne({name: req.body.name});
+    const countryrExist = await Country.findOne({name: validated.value.name});
     if(countryrExist) return res.status(400).send("Country already exist");
 
     const country = new Country({
-        name: req.body.name,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
+        name: validated.value.name,
+        longitude: validated.value.longitude,
+        latitude: validated.value.latitude,
     });
 
     try{
