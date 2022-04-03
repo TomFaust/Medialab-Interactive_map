@@ -5,10 +5,12 @@ function WaterPropertiesValidation(data) {
 
     const schemaWaterPropertiesValidation = joi.object({
         company: joi.string()
+        .lowercase({ force: true })
         .required(),
         period: joi.string()
         .required()
-        .valid('Q1','Q2','Q3', 'Q4'),
+        .lowercase({ force: true })
+        .valid('q1','q2','q3', 'q4'),
         temperature: [{
             value: joi.number()
             .min(0)
@@ -43,7 +45,8 @@ function WaterPropertiesValidation(data) {
         }],
         taste: [{
             water_extraction_area: joi.string()
-            .valid('Groundwater','Surface water','Dune water'),
+            .lowercase({ force: true })
+            .valid('groundwater','surface water','dune water'),
             sulfate: [{
                 value: joi.number()
                 .min(0)

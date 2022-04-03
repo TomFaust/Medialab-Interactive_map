@@ -23,7 +23,7 @@ const getAllWaterProperties = async function(req, res){
             logger.error(err)
         }
         else {res.json(countries);}
-    });
+    }).populate('company', "name");
 };
 
 const getWaterProperties = async function(req, res){
@@ -35,14 +35,13 @@ const updateWaterProperties = async (req, res) => {
     if(errorValidation) res.status(400).send(errorValidation.details[0].message);
 
     const company = await Company.findOne({name: req.body.company}).populate('waterProperties');
-    if(!company) res.status(400).send("Company doesn't exist");
+    // if(!company) res.status(400).send("Company doesn't exist");
 
     const period = company?.waterProperties
     const periodExist = await period.find(element => element.period === req.body.period);
     if(periodExist) return res.status(400).send("Period already exist");
 
     Company.findByIdAndUpdate({_id: req.params.id}, {
-        company: company.id,
         period: req.body.period,
         temperature: {
             value: req.body.temperature
@@ -101,50 +100,32 @@ const deleteWaterProperties =  async (req, res) => {
 
 
 const postWaterProperties =  async (req, res) => {
-    const {errorValidation} = PropertiesValidation(req.body)
-    if(errorValidation) res.status(400).send(errorValidation.details[0].message);
+    const validated = await PropertiesValidation(req.body)
+    if(validated?.error) res.status(400).send(validated.error.details[0].message);
 
-    const company = await Company.findOne({name: req.body.company}).populate('waterProperties');
+    const company = await Company.findOne({name: validated.value.company}).populate('waterProperties');
     if(!company) res.status(400).send("Company doesn't exist");
 
     const period = company?.waterProperties
-    const periodExist = await period.find(element => element.period === req.body.period);
+    const periodExist = await period.find(element => element.period === validated.value.period);
     if(periodExist) return res.status(400).send("Period already exist");
 
     const properties = new Properties({
         company: company.id,
-        period: req.body.period,
-        temperature: {
-            value: req.body.temperature
-        },
-        hardness: {
-            value: req.body.hardness
-        },
-        turbidity: {
-            value: req.body.turbidity
-        },
+        period: validated.value.period,
+        temperature: validated.value.temperature,
+        hardness:  validated.value.hardness,
+        turbidity: validated.value.turbidity,
         health: {
-            nitrate: {
-                value: req.body.nitrate
-            },
-            nitrite: {
-                value: req.body.nitrite
-            },
-            fluoride: {
-                value: req.body.fluoride
-            },
+            nitrate:  validated.value.health.nitrate,
+            nitrite:  validated.value.health.nitrite,
+            fluoride: validated.value.health.fluoride,
         },
         taste: {
-            water_extraction_area: req.body.water_extraction_area,
-            sulfate: {
-                value: req.body.sulfate
-            },
-            natrium: {
-                value: req.body.natrium
-            },
-            chloride: {
-                value: req.body.chloride
-            },
+            water_extraction_area: validated.value.taste.water_extraction_area,
+            sulfate: validated.value.taste.sulfate,
+            natrium: validated.value.taste.natrium,
+            chloride: validated.value.taste.chloride,
         },
     });
 
