@@ -183,7 +183,7 @@ export default function App() {
             return obj.name === location
         }) 
 
-        console.log(selectedCountry);
+        console.log('Selected ' + location);
 
         // Check which country the user wants to change
         if (isBaseCountry){
@@ -201,7 +201,6 @@ export default function App() {
 
     // Fetch waterProperties from the first company of a country 
     async function fetchCountryWaterProps(id) {
-        console.log('Pull the water Kronk');
         console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/company/' + id);
 
         let data
@@ -209,13 +208,11 @@ export default function App() {
             .then((res) => res.json())
             .then((json) => data = json.company.waterProperties)
 
-        console.log(data[0]);
         return data[0]
     }
     
     // GET all the countries and put them in state Countries
     async function fetchCountries() {
-        console.log('Pull the countries Kronk');
         console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/country');
 
         let data
@@ -247,8 +244,9 @@ export default function App() {
 
             {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
             <div className='countries'> 
-                <div onClick={()=> selectedData("Belgium")}> Belgium </div>
                 <div onClick={()=> selectedData("Netherlands")}> Netherlands </div>
+                <div onClick={()=> selectedData("Belgium")}> Belgium </div>
+                <div onClick={()=> selectedData("Germany")}> Germany </div>
             </div>
         </div>
     );

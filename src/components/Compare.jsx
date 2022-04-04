@@ -73,7 +73,6 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
 
                     // Handle strings
                     if (typeof baseData[properties][0][childProps] === 'string') {
-                        console.log(childProps + ': ' + baseData[properties][0][childProps]);
                         divs.push(
                             <div className="stats" key={index}>
                                 <div className='max-stat'>{baseData[properties][0][childProps]}</div>
@@ -97,10 +96,16 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
     // Check if the compare box is opened
     if (open) {
         // Check if all the data is provided
-        if (isEmptyObject(baseData) || isEmptyObject(compareData)) {
+        if (isEmptyObject(baseData)) {
             return(
                 <div className='compare'>
                     <p className='feedback-msg'>Please select two countries to compare their water</p>
+                </div>
+            )
+        } else if(isEmptyObject(compareData)) {
+            return(
+                <div className='compare'>
+                    <p className='feedback-msg'>Please select another country to compare their water</p>
                 </div>
             )
         } else {
@@ -110,12 +115,6 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
                         <div id="locations">
                             <h3>{baseCountry} <img src={SwitchIcon} onClick={()=>setIsBaseCountry(true)}/> </h3> 
                             <h3>{compareCountry}</h3>
-                        </div>
-
-                        <div>
-                            {/* TODO: Uncomment when the correct data is being collected */}
-                            {/* <small>{baseData.company} | {baseData.date} | {baseData.period}</small>
-                            <small>{compareData.company} | {compareData.date} | {compareData.period}</small> */}
                         </div>
 
                         {statsDivs()}
