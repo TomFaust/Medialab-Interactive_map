@@ -45,3 +45,39 @@
         left: 10px;
         z-index: 2;
     }
+
+
+.map-container,#root,.container,body {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height:100vh;
+}
+
+body{
+    margin:0;
+    overflow: hidden;
+}
+
+.sidebar {
+    background-color: #26b4f4;
+    border: #109ede solid 2px;
+    color: #fff;
+    padding: 6px 12px;
+    font-family: monospace;
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 12px;
+    border-radius: 4px;
+}
+
+.marker {
+    background-image: url('https://nl.farnell.com/productimages/large/en_GB/3253131-40.jpg');
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}

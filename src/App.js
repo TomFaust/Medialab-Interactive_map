@@ -1,7 +1,7 @@
 import './styles/general.scss'
 import './styles/app.scss'
-import React, { useRef, useEffect, useState } from 'react';
-import { Compare } from './components/Compare';
+import React, {useRef, useEffect, useState} from 'react';
+import {Compare} from './components/Compare';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import industry from './Assets/map-icons/industry.png'
 import CompareIcon from './Assets/compare-icon.svg'
@@ -18,27 +18,13 @@ export default function App() {
     const [lat, setLat] = useState(0);
     const [zoom, setZoom] = useState(9);
 
+    const [countries, setCountries] = useState({})
     const [openCompare, setOpenCompare] = useState(false);
     const [isBaseCountry, setIsBaseCountry] = useState(true);
-    const [waterData, setWaterData] = useState({
-        'NL': { 
-            'location': 'Nederland',
-            'temp': 9,
-            'hardness': 20
-        },   
-        'FR': { 
-            'location': 'Frankrijk',
-            'temp': 30,
-            'hardness': 15
-        },  
-        'DE': { 
-            'location': 'Duitsland',
-            'temp': 2,
-            'hardness': 10
-        }  
-    });
     const [baseData, setBaseData] = useState({});
     const [compareData, setCompareData] = useState({});
+    const [baseCountry, setBaseCountry] = useState('');
+    const [compareCountry, setCompareCountry] = useState('');
 
     useEffect(() => {
 
@@ -76,106 +62,153 @@ export default function App() {
 
         map.current.on('load', () => {
 
-            const importAll = require =>
-                require.keys().reduce((acc, next) => {
-                    acc[next.replace("./", "")] = require(next);
-                    return acc;
-                }, {});
+            fetchCountries()
 
-            const images = importAll(
-                require.context("./Assets/map-icons", false, /\.(png|jpe?g|svg)$/)
-            );
-
-            map.current.loadImage(
-                images['industry.png'],
-                (error, image) => {
-                    if (error) throw error;
-
-                    // Add the image to the map style.
-                    map.current.addImage('icon', image);
-
-                    // Add a data source containing one point feature.
-                    map.current.addSource('point', {
-                        'type': 'geojson',
-                        'cluster': true,
-                        'clusterMaxZoom': 21, // Max zoom to cluster points on
-                        'clusterRadius': 50,
-                        'data': {
-                            'type': 'FeatureCollection',
-                            'features': [
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': [5.4135, 51.9669]
-                                    },
-                                    'properties':{
-                                        'name':'a flag'
-                                    }
-                                },
-                                {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': [5.5135, 51.9669]
-                                    },
-                                    'properties':{
-                                        'name':'a flag'
-                                    }
-                                }
-                            ]
-                        }
-                    });
-
-                    map.current.addLayer({
-                        id: 'clusters',
-                        type: 'circle',
-                        source: 'point',
-                        filter: ['has', 'point_count'],
-                        paint: {
-                            'circle-color': '#26b4f4',
-                            'circle-radius': 15,
-                            'circle-stroke-width': 2,
-                            'circle-stroke-color': '#109ede',
-                        }
-                    });
-
-                    map.current.addLayer({
-                        id: 'cluster-count',
-                        type: 'symbol',
-                        source: 'point',
-                        filter: ['has', 'point_count'],
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                        },
-                        paint: {
-                            "text-color": "#ffffff"
-                        }
-                    });
-
-
-                    // Add a layer to use the image to represent the data.
-                    map.current.addLayer({
-                        'id': 'unclustered-point',
-                        'type': 'symbol',
-                        'source': 'point', // reference the data source
-                        'filter': ['!', ['has', 'point_count']],
-                        'layout': {
-                            'icon-image': 'icon', // reference the image
-                            'icon-size': 0.1
-                        }
-                    });
-                }
-            );
         })
 
-        map.current.on('click', 'unclustered-point', (e) => {
-            const description = e.features[0].properties;
+        // map.current.addControl(
+        //     new MapboxGeocoder({
+        //         accessToken: mapboxgl.accessToken,
+        //         mapboxgl: mapboxgl
+        //     }),
+        //     'top-left'
+        // );
+    }, []);
 
+    // Call this function via an onClick on the mappositions
+    async function selectedData(location) {
+        // Get the selected country data
+        let selectedCountry = countries.find(obj => {
+            return obj.name === location
+        })
+        // console.log(selectedCountry._id);
 
-            console.log(description)
+        // Check which country the user wants to change
+        if (isBaseCountry) {
+            setBaseData(await fetchWaterData(selectedCountry._id))
+        } else {
+            setCompareData(await fetchWaterData(selectedCountry._id))
+        }
+
+        // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
+        setIsBaseCountry(false)
+    }
+
+    async function loadMarkers(data) {
+
+        const importAll = require =>
+            require.keys().reduce((acc, next) => {
+                acc[next.replace("./", "")] = require(next);
+                return acc;
+            }, {});
+
+        const images = importAll(
+            require.context("./Assets/map-icons", false, /\.(png|jpe?g|svg)$/)
+        );
+
+        console.log(data);
+
+        let markerInfo = []
+
+        data.forEach(function (datapoint) {
+            datapoint.companies.forEach(function (marker) {
+                markerInfo.push(
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [marker['latitude'],marker['longitude']]
+                        },
+                        'properties': marker['waterProperties']
+                    }
+                )
+            })
+        })
+
+        map.current.loadImage(
+            images['industry.png'],
+            (error, image) => {
+                if (error) throw error;
+
+                // Add the image to the map style.
+                map.current.addImage('icon', image);
+
+                // Add a data source containing one point feature.
+                map.current.addSource('industry', {
+                    'type': 'geojson',
+                    'cluster': true,
+                    'clusterMaxZoom': 21, // Max zoom to cluster points on
+                    'clusterRadius': 50,
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': markerInfo
+                    }
+                });
+
+                addClusterting('industry')
+
+                // Add a layer to use the image to represent the data.
+                map.current.addLayer({
+                    'id': 'unclustered-point',
+                    'type': 'symbol',
+                    'source': 'industry', // reference the data source
+                    'filter': ['!', ['has', 'point_count']],
+                    'layout': {
+                        'icon-image': 'icon', // reference the image
+                        'icon-size': 0.09
+                    }
+                });
+
+                map.current.on('click', 'unclustered-point', (e) => {
+                    const description = e.features[0];
+                    console.log(description)
+                });
+
+            }
+        );
+    }
+
+    async function fetchWaterData(id) {
+        // Fetch waterdata from API & setWaterData()
+        console.log('Pull the water Kronk');
+        console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/country/' + id);
+
+        let data
+        await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/country/' + id)
+            .then((res) => res.json())
+            .then((json) => data = json)
+
+        // console.log(data.country);
+        return data.country
+    }
+
+    async function addClusterting(layer){
+        map.current.addLayer({
+            id: 'clusters',
+            type: 'circle',
+            source: layer,
+            filter: ['has', 'point_count'],
+            paint: {
+                'circle-color': '#26b4f4',
+                'circle-radius': 15,
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#109ede',
+            }
+        });
+
+        map.current.addLayer({
+            id: 'cluster-count',
+            type: 'symbol',
+            source: layer,
+            filter: ['has', 'point_count'],
+            layout: {
+                'text-field': '{point_count_abbreviated}',
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 12,
+            },
+            paint: {
+                "text-color": "#ffffff"
+            }
         });
 
         // map.current.addControl(
@@ -186,22 +219,54 @@ export default function App() {
         //     'top-left'
         // );
 
-        fetchWaterData()
-    }, []);
+    }
 
     // Call this function via an onClick on the mappositions
-    function selectedData(location) {
+    // See what country is clicked, fetch the correct data and put it in state Base- or CompareCountry
+    async function selectedData(location) {
+        // Get the selected country data
+        let selectedCountry = countries.find(obj => {
+            return obj.name === location
+        })
+
+        console.log('Selected ' + location);
+
         // Check which country the user wants to change
-        if (isBaseCountry){setBaseData(waterData[location])}
-        else {setCompareData(waterData[location])}
+        if (isBaseCountry){
+            setBaseData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))
+            setBaseCountry(location)
+        }
+        else {
+            setCompareData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))
+            setCompareCountry(location)
+        }
         
         // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
         setIsBaseCountry(false)
     }
 
-    function fetchWaterData() {
-        // Fetch waterdata from API & setWaterData()
-        console.log('Pull the data Kronk');
+    // Fetch waterProperties from the first company of a country
+    async function fetchCountryWaterProps(id) {
+        console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/company/' + id);
+
+        let data
+        await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/company/' + id)
+            .then((res) => res.json())
+            .then((json) => data = json.company.waterProperties)
+
+        return data[0]
+    }
+
+    async function fetchCountries() {
+        console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/country');
+
+        let data
+        await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/country')
+            .then((res) => res.json())
+            .then((json) => data = json)
+
+        setCountries(data)
+        loadMarkers(data);
     }
 
     return (
@@ -218,15 +283,15 @@ export default function App() {
                     <p>Search a country</p>
                     <img src={SearchIcon}/>
                 </div>
-                <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
+                <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)}/>
             </div>
-            <Compare open={openCompare} baseData={baseData} compareData={compareData} setIsBaseCountry={setIsBaseCountry}/>
+            <Compare open={openCompare} baseData={baseData} compareData={compareData} baseCountry={baseCountry} compareCountry={compareCountry} setIsBaseCountry={setIsBaseCountry}/>
 
-        {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
+            {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
             <div className='countries'> 
-                <div onClick={()=> selectedData("NL")}> Nederland </div>
-                <div onClick={()=> selectedData("FR")}> Frankrijk </div>
-                <div onClick={()=> selectedData("DE")}> Duitsland </div>
+                <div onClick={()=> selectedData("Netherlands")}> Netherlands </div>
+                <div onClick={()=> selectedData("Belgium")}> Belgium </div>
+                <div onClick={()=> selectedData("Germany")}> Germany </div>
             </div>
         </div>
     );

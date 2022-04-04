@@ -30,6 +30,8 @@
 
     box-shadow: darkgray 1px 1px 10px;
 
+    overflow-y: scroll;
+
     #locations{
         display: flex;
         flex-direction: row;
@@ -69,10 +71,22 @@
 
             background-color: #EBF8FD;
             border-radius: 7px;
+            
+            text-align: center;
 
             div{
-                width: 40%;
                 height: 100%;
+            }
+
+            p{
+                width: 100%;
+                height: 100%;
+
+                padding: 12.5px 0;
+
+                text-align: left;
+                text-transform: capitalize;
+                overflow-x: hidden;
             }
         }
 
@@ -83,6 +97,10 @@
                 background-color: #98C1D9;
                 border-radius: 25px 7px 7px 25px;
             }
+
+            p{
+                text-align: right;
+            }
         } 
         
         .max-stat:nth-of-type(2) div{
@@ -90,13 +108,19 @@
             border-radius: 7px 25px 25px 7px;
         }
 
-        p{
+        .property{
             width: 20%;
             margin: 0;
+            padding: 0 5px;
 
             text-transform: capitalize;
             text-align: center;
         }
+    }
+
+    h4{
+        margin-top: 20px;
+        text-transform: capitalize;
     }
 
     .feedback-msg{
