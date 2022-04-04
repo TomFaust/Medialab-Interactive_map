@@ -19,12 +19,11 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
 
         // Loop through all the properties
         for (const properties in baseData) {
-            console.log(properties + ': ' + compareData[properties]);
-            // Excluded properties: 'name'
+            // console.log(properties + ': ' + compareData[properties]);
 
             // Handle all the Numbers
             if (Array.isArray(baseData[properties]) && typeof baseData[properties][0].value === 'number') {
-                console.log(baseData[properties][0].value);
+                // console.log(baseData[properties][0].value);
                 let baseLength = (baseData[properties][0].value * 100) / baseData[properties][0].maxValue
                 let compareLength = (compareData[properties][0].value * 100) / compareData[properties][0].maxValue
 
@@ -41,61 +40,53 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
                 )
             }
 
-            // Handle all the Strings
-            // if (typeof baseData[properties][0] == 'string') {
-            //     divs.push(
-            //         <div className="stats" key={index}>
-            //             <div className='max-stat'>{baseData[properties][0].value}</div>
-            //             <p>{properties}</p>
-            //             <div className='max-stat'>String: {compareData[properties][0].value}</div>
-            //         </div>
-            //     )
-            // }
+            // Handle health and taste
+            if (properties === 'health' || properties === 'taste') {
+                console.log(properties + '= health or taste');
+                let childDivs = []
 
-            // // Handle health and taste
-            // if (properties === 'health' || properties === 'taste') {
-            //     let childDivs = []
-
-            //     // childDivs.push(
-            //     //     <h4 key={index}>{baseData[properties]}</h4>
-            //     // )
+                // childDivs.push(
+                //     <h4 key={index}>{baseData[properties]}</h4>
+                // )
                 
 
-            //     for (const childProps in baseData[properties]) {
+                for (const childProps in baseData[properties][0]) {
+                    console.log(childProps + ': ' + baseData[properties][0][childProps].value);
+                    console.log(childProps);
                     
-            //         // Handle numbers
-            //         if (typeof childProps == 'number') {
-            //             let baseLength = (baseData[properties][0][childProps].value * 100) / baseData[properties][childProps].max
-            //             let compareLength = (compareData[properties][0][childProps].value * 100) / compareData[properties][childProps].max
+                    // Handle numbers
+                    if (typeof baseData[properties][0][childProps].value === 'number') {
+                        let baseLength = (baseData[properties][0][childProps].value * 100) / baseData[properties][0][childProps].maxValue
+                        let compareLength = (compareData[properties][0][childProps].value * 100) / compareData[properties][0][childProps].maxValue
 
-            //             childDivs.push(
-            //                 <div className="stats" key={index}>
-            //                     <div className='max-stat'>
-            //                         <div style={{width: baseLength+'%'}}>{baseData[properties][0][childProps].value}</div>
-            //                     </div>
-            //                     <p>{properties}({baseData[properties][0][childProps].unit})</p>
-            //                     <div className='max-stat'>
-            //                         <div style={{width: compareLength+'%'}}>{compareData[properties][0][childProps].value}</div>
-            //                     </div>
-            //                 </div>
-            //             )
-            //         }
+                        childDivs.push(
+                            <div className="stats" key={index}>
+                                <div className='max-stat'>
+                                    <div style={{width: baseLength+'%'}}>{baseData[properties][0][childProps].value}</div>
+                                </div>
+                                <p>{childProps}({baseData[properties][0][childProps].unit})</p>
+                                <div className='max-stat'>
+                                    <div style={{width: compareLength+'%'}}>{compareData[properties][0][childProps].value}</div>
+                                </div>
+                            </div>
+                        )
+                    }
 
-            //         // Handle strings
-            //         if (typeof childProps == 'string') {
-            //             divs.push(
-            //                 <div className="stats" key={index}>
-            //                     <div className='max-stat'>{baseData[properties][0]}</div>
-            //                     <p>{properties}</p>
-            //                     <div className='max-stat'>String: {compareData[properties][0]}</div>
-            //                 </div>
-            //             )
-            //         }
-            //     }
+                    // Handle strings
+                    if (typeof baseData[properties][0][childProps] === 'string') {
+                        divs.push(
+                            <div className="stats" key={index}>
+                                <div className='max-stat'>{baseData[properties][0][childProps]}</div>
+                                <p>{childProps}</p>
+                                <div className='max-stat'>{compareData[properties][0][childProps]}</div>
+                            </div>
+                        )
+                    }
+                }
 
-            //     // Add the childDivs to divs
-            //     divs = divs.concat(childDivs)
-            // }
+                // Add the childDivs to divs
+                divs = divs.concat(childDivs)
+            }
 
             index++
         }
