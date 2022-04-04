@@ -9,7 +9,8 @@ export function registerValidation(data) {
         .required(),
         email: joi.string()
         .min(6)
-        .required(),
+        .required()
+        .lowercase({ force: true }),
         password: joi.string()
         .min(6)
         .required(),
@@ -23,7 +24,8 @@ export function loginValidation(data) {
     const schemaLoginValidation = joi.object({
         email: joi.string()
         .min(6)
-        .required(),
+        .required()
+        .lowercase({ force: true }),
         password: joi.string()
         .min(6)
         .required(),

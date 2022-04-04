@@ -81,7 +81,7 @@ export default function App() {
 
     // Call this function via an onClick on the mappositions
     async function selectedData(location) {
-        // Get the selected country data 
+        // Get the selected country data
         let selectedCountry = countries.find(obj => {
             return obj.name === location
         })
@@ -209,7 +209,85 @@ export default function App() {
             paint: {
                 "text-color": "#ffffff"
             }
+                    map.current.addLayer({
+                        id: 'cluster-count',
+                        type: 'symbol',
+                        source: 'point',
+                        filter: ['has', 'point_count'],
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                        },
+                        paint: {
+                            "text-color": "#ffffff"
+                        }
+                    });
+
+
+                    // Add a layer to use the image to represent the data.
+                    map.current.addLayer({
+                        'id': 'unclustered-point',
+                        'type': 'symbol',
+                        'source': 'point', // reference the data source
+                        'filter': ['!', ['has', 'point_count']],
+                        'layout': {
+                            'icon-image': 'icon', // reference the image
+                            'icon-size': 0.1
+                        }
+                    });
+                }
+            );
+        })
+
+        map.current.on('click', 'unclustered-point', (e) => {
+            const description = e.features[0].properties;
+
+
+            console.log(description)
         });
+
+        // map.current.addControl(
+        //     new MapboxGeocoder({
+        //         accessToken: mapboxgl.accessToken,
+        //         mapboxgl: mapboxgl
+        //     }),
+        //     'top-left'
+        // );
+
+        fetchCountries()
+    }, []);
+
+    // Call this function via an onClick on the mappositions
+    // See what country is clicked, fetch the correct data and put it in state Base- or CompareCountry
+    async function selectedData(location) {
+        // Get the selected country data
+        let selectedCountry = countries.find(obj => {
+            return obj.name === location
+        })
+
+        console.log(selectedCountry);
+
+        // Check which country the user wants to change
+        if (isBaseCountry)  {setBaseData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))}
+        else                {setCompareData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))}
+
+        // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
+        setIsBaseCountry(false)
+    }
+
+    // Fetch waterProperties from the first company of a country
+    async function fetchCountryWaterProps(id) {
+        console.log('Pull the water Kronk');
+        console.log('Fetch: ' + window.location.protocol + '//' + window.location.hostname + ':8000/api/company/' + id);
+
+        let data
+        await fetch(window.location.protocol + '//' + window.location.hostname + ':8000/api/company/' + id)
+            .then((res) => res.json())
+            .then((json) => data = json.company.waterProperties)
+
+        console.log(data);
+        return data
     }
 
     async function fetchCountries() {

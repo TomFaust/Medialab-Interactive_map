@@ -6,9 +6,11 @@ function companyValidation(data) {
     const schemaCompanyValidation = joi.object({
         name: joi.string()
         .min(6)
-        .required(),
+        .required()
+        .lowercase({ force: true }),
         country: joi.string()
         .min(6)
+        .lowercase({ force: true })
         .required(),
         longitude: joi.number()
         .min(6)
