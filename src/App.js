@@ -111,18 +111,20 @@ export default function App() {
         let markerInfo = []
 
         data.forEach(function (datapoint) {
-            datapoint.companies.forEach(function (marker) {
+
                 markerInfo.push(
                     {
                         'type': 'Feature',
                         'geometry': {
                             'type': 'Point',
-                            'coordinates': [marker['latitude'],marker['longitude']]
+                            'coordinates': [datapoint['latitude'],datapoint['longitude']]
                         },
-                        'properties': marker['waterProperties']
+                        'properties': {
+                            'name': datapoint['name']
+                        }
                     }
                 )
-            })
+
         })
 
         map.current.loadImage(
@@ -160,8 +162,12 @@ export default function App() {
                 });
 
                 map.current.on('click', 'unclustered-point', (e) => {
-                    const description = e.features[0];
-                    console.log(description)
+                    const name = e.features[0].properties['name'];
+                    console.log(name)
+
+                    selectedData(name)
+                    //selectedData('Germany')
+
                 });
 
             }
@@ -224,6 +230,10 @@ export default function App() {
     // Call this function via an onClick on the mappositions
     // See what country is clicked, fetch the correct data and put it in state Base- or CompareCountry
     async function selectedData(location) {
+
+        console.log('countries: ')
+        console.log(countries)
+
         // Get the selected country data
         let selectedCountry = countries.find(obj => {
             return obj.name === location
