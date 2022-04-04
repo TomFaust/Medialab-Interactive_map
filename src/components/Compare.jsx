@@ -23,7 +23,6 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
 
             // Handle all the Numbers
             if (Array.isArray(baseData[properties]) && typeof baseData[properties][0].value === 'number') {
-                // console.log(baseData[properties][0].value);
                 let baseLength = (baseData[properties][0].value * 100) / baseData[properties][0].maxValue
                 let compareLength = (compareData[properties][0].value * 100) / compareData[properties][0].maxValue
 
@@ -38,21 +37,21 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
                         </div>
                     </div>
                 )
+
+                index++
             }
 
             // Handle health and taste
             if (properties === 'health' || properties === 'taste') {
-                console.log(properties + '= health or taste');
                 let childDivs = []
 
-                // childDivs.push(
-                //     <h4 key={index}>{baseData[properties]}</h4>
-                // )
-                
+                childDivs.push(
+                    <h4 key={index}>{properties}</h4>
+                )
+
+                index++
 
                 for (const childProps in baseData[properties][0]) {
-                    console.log(childProps + ': ' + baseData[properties][0][childProps].value);
-                    console.log(childProps);
                     
                     // Handle numbers
                     if (typeof baseData[properties][0][childProps].value === 'number') {
@@ -74,6 +73,7 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
 
                     // Handle strings
                     if (typeof baseData[properties][0][childProps] === 'string') {
+                        console.log(childProps + ': ' + baseData[properties][0][childProps]);
                         divs.push(
                             <div className="stats" key={index}>
                                 <div className='max-stat'>{baseData[properties][0][childProps]}</div>
@@ -82,13 +82,13 @@ export function Compare({open, baseData, compareData, baseCountry, compareCountr
                             </div>
                         )
                     }
+
+                    index++
                 }
 
                 // Add the childDivs to divs
                 divs = divs.concat(childDivs)
             }
-
-            index++
         }
 
         return divs
