@@ -1,0 +1,132 @@
+#bg-blur{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+}
+
+.compare{
+    position: absolute;
+    bottom: 0;
+    left: 15vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 70vw;
+    height: 85vh;
+    padding: 40px;
+
+    border-radius: 7px 7px 0 0;
+    border-left: none;
+    
+    background-color: white;
+
+    box-shadow: darkgray 1px 1px 10px;
+
+    overflow-y: scroll;
+
+    #locations{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        width: 100%;
+
+        h3{
+            width: 43%;
+            padding-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: rgba(19, 150, 211, 0.9) solid 1px;
+            
+            img{
+                height: 23px;
+                margin-left: 5px;
+                user-select: none;
+            }
+        }
+    }
+    
+
+    .stats{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+        width: 100%;
+        padding: 10px 0 10px 0;
+
+        .max-stat{
+            display: flex;
+            width: 40%;
+            height: 50px;
+
+            background-color: #EBF8FD;
+            border-radius: 7px;
+            
+            text-align: center;
+
+            div{
+                height: 100%;
+            }
+
+            p{
+                width: 100%;
+                height: 100%;
+
+                padding: 12.5px 0;
+
+                text-align: left;
+                text-transform: capitalize;
+                overflow-x: hidden;
+            }
+        }
+
+        .max-stat:nth-of-type(1){
+            flex-direction: row-reverse;
+
+            div{
+                background-color: #98C1D9;
+                border-radius: 25px 7px 7px 25px;
+            }
+
+            p{
+                text-align: right;
+            }
+        } 
+        
+        .max-stat:nth-of-type(2) div{
+            background-color: #98C1D9;
+            border-radius: 7px 25px 25px 7px;
+        }
+
+        .property{
+            width: 20%;
+            margin: 0;
+            padding: 0 5px;
+
+            text-transform: capitalize;
+            text-align: center;
+        }
+    }
+
+    h4{
+        margin-top: 20px;
+        text-transform: capitalize;
+    }
+
+    .feedback-msg{
+        margin-top: 5vh;
+        text-align: center;
+        font-style: italic;
+        font-weight: 400;
+    }
+}
