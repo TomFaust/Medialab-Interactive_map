@@ -64,11 +64,6 @@ export default function App() {
 
         })
 
-        map.current.on('click', 'unclustered-point', (e) => {
-            const description = e.features[0].properties;
-            console.log(description)
-        });
-
         // map.current.addControl(
         //     new MapboxGeocoder({
         //         accessToken: mapboxgl.accessToken,
@@ -76,7 +71,6 @@ export default function App() {
         //     }),
         //     'top-left'
         // );
-
     }, []);
 
     // Call this function via an onClick on the mappositions
@@ -129,8 +123,6 @@ export default function App() {
             })
         })
 
-        console.log(markerInfo)
-
         map.current.loadImage(
             images['industry.png'],
             (error, image) => {
@@ -164,6 +156,12 @@ export default function App() {
                         'icon-size': 0.09
                     }
                 });
+
+                map.current.on('click', 'unclustered-point', (e) => {
+                    const description = e.features[0];
+                    console.log(description)
+                });
+
             }
         );
     }
@@ -182,7 +180,7 @@ export default function App() {
         return data.country
     }
 
-    async function addClusterting(layer) {
+    async function addClusterting(layer){
         map.current.addLayer({
             id: 'clusters',
             type: 'circle',
@@ -209,42 +207,6 @@ export default function App() {
             paint: {
                 "text-color": "#ffffff"
             }
-                    map.current.addLayer({
-                        id: 'cluster-count',
-                        type: 'symbol',
-                        source: 'point',
-                        filter: ['has', 'point_count'],
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                        },
-                        paint: {
-                            "text-color": "#ffffff"
-                        }
-                    });
-
-
-                    // Add a layer to use the image to represent the data.
-                    map.current.addLayer({
-                        'id': 'unclustered-point',
-                        'type': 'symbol',
-                        'source': 'point', // reference the data source
-                        'filter': ['!', ['has', 'point_count']],
-                        'layout': {
-                            'icon-image': 'icon', // reference the image
-                            'icon-size': 0.1
-                        }
-                    });
-                }
-            );
-        })
-
-        map.current.on('click', 'unclustered-point', (e) => {
-            const description = e.features[0].properties;
-
-
-            console.log(description)
         });
 
         // map.current.addControl(
@@ -255,8 +217,7 @@ export default function App() {
         //     'top-left'
         // );
 
-        fetchCountries()
-    }, []);
+    }
 
     // Call this function via an onClick on the mappositions
     // See what country is clicked, fetch the correct data and put it in state Base- or CompareCountry
