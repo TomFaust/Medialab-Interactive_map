@@ -32,7 +32,7 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                         <div className='max-stat'>
                             <div style={{width: baseLength+'%'}}>{baseData[properties].value}</div>
                         </div>
-                        <p>{properties}</p>
+                        <p>{properties} ({baseData[properties].unit})</p>
                         <div className='max-stat'>
                             <div style={{width: compareLength+'%'}}>{compareData[properties].value}</div>
                         </div>
@@ -72,7 +72,7 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                                 <div className='max-stat'>
                                     <div style={{width: baseLength+'%'}}>{baseData[properties][childProps].value}</div>
                                 </div>
-                                <p>{properties}</p>
+                                <p>{properties}({baseData[properties][childProps].unit})</p>
                                 <div className='max-stat'>
                                     <div style={{width: compareLength+'%'}}>{compareData[properties][childProps].value}</div>
                                 </div>
