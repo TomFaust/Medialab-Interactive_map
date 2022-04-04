@@ -23,7 +23,7 @@ const getAllCompany = async function(req, res){
             logger.error(err)
         }
         else {res.json(countries);}
-    }).populate("waterProperties", "id, period")
+    }).populate("waterProperties")
 };
 
 const getCompany = async function(req, res){
