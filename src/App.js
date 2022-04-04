@@ -23,6 +23,8 @@ export default function App() {
     const [isBaseCountry, setIsBaseCountry] = useState(true);
     const [baseData, setBaseData] = useState({});
     const [compareData, setCompareData] = useState({});
+    const [baseCountry, setBaseCountry] = useState('');
+    const [compareCountry, setCompareCountry] = useState('');
 
     useEffect(() => {
 
@@ -184,8 +186,14 @@ export default function App() {
         console.log(selectedCountry);
 
         // Check which country the user wants to change
-        if (isBaseCountry)  {setBaseData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))}
-        else                {setCompareData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))}
+        if (isBaseCountry){
+            setBaseData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))
+            setBaseCountry(location)
+        }
+        else {
+            setCompareData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))
+            setCompareCountry(location)
+        }
         
         // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
         setIsBaseCountry(false)
@@ -201,8 +209,8 @@ export default function App() {
             .then((res) => res.json())
             .then((json) => data = json.company.waterProperties)
 
-        console.log(data);
-        return data
+        console.log(data[0]);
+        return data[0]
     }
     
     // GET all the countries and put them in state Countries
@@ -235,7 +243,7 @@ export default function App() {
                 </div>
                 <img src={CompareIcon} id='compare-icon' onClick={() => setOpenCompare(!openCompare)} />
             </div>
-            <Compare open={openCompare} baseData={baseData} compareData={compareData} setIsBaseCountry={setIsBaseCountry}/>
+            <Compare open={openCompare} baseData={baseData} compareData={compareData} baseCountry={baseCountry} compareCountry={compareCountry} setIsBaseCountry={setIsBaseCountry}/>
 
             {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
             <div className='countries'> 

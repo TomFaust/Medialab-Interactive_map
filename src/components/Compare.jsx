@@ -1,7 +1,7 @@
 import '../styles/compare.scss'
 import SwitchIcon from '../Assets/switch-icon.svg'
 
-export function Compare({open, baseData, compareData, setIsBaseCountry}) {
+export function Compare({open, baseData, compareData, baseCountry, compareCountry, setIsBaseCountry}) {
 
     function isEmptyObject(obj) {
         if (obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype) {
@@ -19,82 +19,83 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
 
         // Loop through all the properties
         for (const properties in baseData) {
-            // console.log(properties + ': ' + compareData[properties]);
+            console.log(properties + ': ' + compareData[properties]);
             // Excluded properties: 'name'
 
             // Handle all the Numbers
-            if (typeof baseData[properties] == 'number') {
-                let baseLength = (baseData[properties].value * 100) / baseData[properties].max
-                let compareLength = (compareData[properties].value * 100) / compareData[properties].max
+            if (Array.isArray(baseData[properties]) && typeof baseData[properties][0].value === 'number') {
+                console.log(baseData[properties][0].value);
+                let baseLength = (baseData[properties][0].value * 100) / baseData[properties][0].maxValue
+                let compareLength = (compareData[properties][0].value * 100) / compareData[properties][0].maxValue
 
                 divs.push(
                     <div className="stats" key={index}>
                         <div className='max-stat'>
-                            <div style={{width: baseLength+'%'}}>{baseData[properties].value}</div>
+                            <div style={{width: baseLength+'%'}}>{baseData[properties][0].value}</div>
                         </div>
-                        <p>{properties} ({baseData[properties].unit})</p>
+                        <p>{properties} ({baseData[properties][0].unit})</p>
                         <div className='max-stat'>
-                            <div style={{width: compareLength+'%'}}>{compareData[properties].value}</div>
+                            <div style={{width: compareLength+'%'}}>{compareData[properties][0].value}</div>
                         </div>
                     </div>
                 )
             }
 
             // Handle all the Strings
-            if (typeof baseData[properties] == 'string') {
-                divs.push(
-                    <div className="stats" key={index}>
-                        <div className='max-stat'>{baseData[properties].value}</div>
-                        <p>{properties}</p>
-                        <div className='max-stat'>String: {compareData[properties].value}</div>
-                    </div>
-                )
-            }
+            // if (typeof baseData[properties][0] == 'string') {
+            //     divs.push(
+            //         <div className="stats" key={index}>
+            //             <div className='max-stat'>{baseData[properties][0].value}</div>
+            //             <p>{properties}</p>
+            //             <div className='max-stat'>String: {compareData[properties][0].value}</div>
+            //         </div>
+            //     )
+            // }
 
-            // Handle health and taste
-            if (properties === 'health' || properties === 'taste') {
-                let childDivs = []
+            // // Handle health and taste
+            // if (properties === 'health' || properties === 'taste') {
+            //     let childDivs = []
 
-                childDivs.push(
-                    <h4>{baseData[properties]}</h4>
-                )
+            //     // childDivs.push(
+            //     //     <h4 key={index}>{baseData[properties]}</h4>
+            //     // )
                 
 
-                for (const childProps in baseData[properties]) {
+            //     for (const childProps in baseData[properties]) {
                     
-                    // Handle numbers
-                    if (typeof childProps == 'number') {
-                        let baseLength = (baseData[properties][childProps].value * 100) / baseData[properties][childProps].max
-                        let compareLength = (compareData[properties][childProps].value * 100) / compareData[properties][childProps].max
+            //         // Handle numbers
+            //         if (typeof childProps == 'number') {
+            //             let baseLength = (baseData[properties][0][childProps].value * 100) / baseData[properties][childProps].max
+            //             let compareLength = (compareData[properties][0][childProps].value * 100) / compareData[properties][childProps].max
 
-                        childDivs.push(
-                            <div className="stats" key={index}>
-                                <div className='max-stat'>
-                                    <div style={{width: baseLength+'%'}}>{baseData[properties][childProps].value}</div>
-                                </div>
-                                <p>{properties}({baseData[properties][childProps].unit})</p>
-                                <div className='max-stat'>
-                                    <div style={{width: compareLength+'%'}}>{compareData[properties][childProps].value}</div>
-                                </div>
-                            </div>
-                        )
-                    }
+            //             childDivs.push(
+            //                 <div className="stats" key={index}>
+            //                     <div className='max-stat'>
+            //                         <div style={{width: baseLength+'%'}}>{baseData[properties][0][childProps].value}</div>
+            //                     </div>
+            //                     <p>{properties}({baseData[properties][0][childProps].unit})</p>
+            //                     <div className='max-stat'>
+            //                         <div style={{width: compareLength+'%'}}>{compareData[properties][0][childProps].value}</div>
+            //                     </div>
+            //                 </div>
+            //             )
+            //         }
 
-                    // Handle strings
-                    if (typeof childProps == 'string') {
-                        divs.push(
-                            <div className="stats" key={index}>
-                                <div className='max-stat'>{baseData[properties]}</div>
-                                <p>{properties}</p>
-                                <div className='max-stat'>String: {compareData[properties]}</div>
-                            </div>
-                        )
-                    }
-                }
+            //         // Handle strings
+            //         if (typeof childProps == 'string') {
+            //             divs.push(
+            //                 <div className="stats" key={index}>
+            //                     <div className='max-stat'>{baseData[properties][0]}</div>
+            //                     <p>{properties}</p>
+            //                     <div className='max-stat'>String: {compareData[properties][0]}</div>
+            //                 </div>
+            //             )
+            //         }
+            //     }
 
-                // Add the childDivs to divs
-                divs = divs.concat(childDivs)
-            }
+            //     // Add the childDivs to divs
+            //     divs = divs.concat(childDivs)
+            // }
 
             index++
         }
@@ -116,8 +117,8 @@ export function Compare({open, baseData, compareData, setIsBaseCountry}) {
                 <div id="bg-blur">
                     <div className='compare'>
                         <div id="locations">
-                            <h3>{baseData.name} <img src={SwitchIcon} onClick={()=>setIsBaseCountry(true)}/> </h3> 
-                            <h3>{compareData.name}</h3>
+                            <h3>{baseCountry} <img src={SwitchIcon} onClick={()=>setIsBaseCountry(true)}/> </h3> 
+                            <h3>{compareCountry}</h3>
                         </div>
 
                         <div>
