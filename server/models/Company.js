@@ -23,6 +23,10 @@ const CompanySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Country"
     },
+    waterProperties: [{
+        type: Schema.Types.ObjectId,
+        ref: "Properties"
+    }],
     date: { 
         type: Date,
         default: Date.now,

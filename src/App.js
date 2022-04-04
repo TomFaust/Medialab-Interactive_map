@@ -157,6 +157,8 @@ export default function App() {
 
         map.current.on('click', 'unclustered-point', (e) => {
             const description = e.features[0].properties;
+
+
             console.log(description)
         });
 
