@@ -1,129 +1,175 @@
-const  mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const WaterProperties = new mongoose.Schema({
-    companyId: {
-        type: Number
+const Schema = mongoose.Schema
+
+const temperature = Schema({
+    value: {
+        type: Number,
+        min: 0,
+        max: 25
     },
-    temperature: { 
+    unit: {
+        type: String,
+        default: "Celsius",
+    },
+    maxValue: {
+        type: Number,
+        default: 25,
+    }
+}, { _id : false });
+
+const hardness = Schema({
+    value: { 
+        type: Number,
+        min: 1.0,
+        max: 2
+    },
+    unit: {
+        type: String,
+        default: "mmol/l",
+    },
+    maxValue: {
+        type: Number,
+        default: 2,
+    }
+}, { _id : false });
+
+const turbidity = Schema({
+    value: { 
+        type: Number,
+        min: 0,
+        max: 4
+    },
+    unit: {
+        type: String,
+        default: "FTE",
+    },
+    maxValue: {
+        type: Number,
+        default: 4,
+    }
+}, { _id : false });
+
+const health = Schema({
+    nitrate: {
         value: { 
             type: Number,
             min: 0,
-            max: 25
+            max: 50
         },
         unit: {
             type: String,
-            default: "Celsius",
-            match: "Celsius"
+            default: "mg/l",
+        },
+        maxValue: {
+            type: Number,
+            default: 50,
         }
     },
-    hardness: { 
-        value: { 
-            type: Number,
-            min: 1.0,
-            max: 2
-        },
-        unit: {
-            type: String,
-            default: "mmol/l",
-            match: "mmol/l"
-        },
-    },
-    turbidity: { 
+    nitrite: {
         value: { 
             type: Number,
             min: 0,
-            max: 4
+            max: 0.1
         },
         unit: {
             type: String,
-            default: "FTE",
-            match: "FTE"
+            default: "mg/l",
+        },
+        maxValue: {
+            type: Number,
+            default: 0.1,
         }
     },
-    health: {
-        nitrate: {
-            value: { 
-                type: Number,
-                min: 0,
-                max: 50
-            },
-            unit: {
-                type: String,
-                default: "mg/l",
-                match: "mg/l"
-            }
+    fluoride: {
+        value: { 
+            type: Number,
+            min: 0,
+            max: 1.1
         },
-        nitrite: {
-            value: { 
-                type: Number,
-                min: 0,
-                max: 0.1
-            },
-            unit: {
-                type: String,
-                default: "mg/l",
-                match: "mg/l"
-            }
-        },
-        fluoride: {
-            value: { 
-                type: Number,
-                min: 0,
-                max: 1.1
-            },
-            unit: {
-                type: String,
-                default: "mg/l",
-                match: "mg/l"
-            }
-        },
-    },
-    taste: {
-        water_extraction_area: {
+        unit: {
             type: String,
-            enum: ['Groundwater','Surface water','Dune water'],
+            default: "mg/l",
         },
-        sulfate: {
-            value: { 
-                type: Number,
-                min: 0,
-                max: 150
-            },
-            unit: {
-                type: String,
-                default: "mg/l",
-                match: "mg/l"
-            }
-        },
-        natrium: {
-            value: { 
-                type: Number,
-                min: 0,
-                max: 150
-            },
-            unit: {
-                type: String,
-                default: "mg/l",
-                match: "mg/l"
-            }
-        },
-        chloride: {
-            value: { 
-                type: Number,
-                min: 0,
-                max: 150
-            },
-            unit: {
-                type: String,
-                default: "mg/l",
-                match: "mg/l"
-            }
-        },
+        maxValue: {
+            type: Number,
+            default: 1.1,
+        }
     },
+}, { _id : false });
+
+const taste = Schema({
+    water_extraction_area: {
+        type: String,
+        enum: ['groundwater','surface water','dune water'],
+    },
+    sulfate: {
+        value: { 
+            type: Number,
+            min: 0,
+            max: 150
+        },
+        unit: {
+            type: String,
+            default: "mg/l",
+        },
+        maxValue: {
+            type: Number,
+            default: 150,
+        }
+    },
+    natrium: {
+        value: { 
+            type: Number,
+            min: 0,
+            max: 150
+        },
+        unit: {
+            type: String,
+            default: "mg/l",
+        },
+        maxValue: {
+            type: Number,
+            default: 150,
+        }
+    },
+    chloride: {
+        value: { 
+            type: Number,
+            min: 0,
+            max: 150
+        },
+        unit: {
+            type: String,
+            default: "mg/l",
+        },
+        maxValue: {
+            type: Number,
+            default: 150,
+        }
+    }
+}, { _id : false });
+
+
+const WaterProperties = new Schema({
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: "Company"
+    },
+    period: {
+        type: String,
+        required: true,
+        enum: ['q1','q2','q3', 'q4'],
+    },
+    temperature: [temperature],
+    hardness: [hardness],
+    turbidity: [turbidity],
+    health: [health],
+    taste: [taste],
     date: { 
         type: Date,
         default: Date.now
     }
 })
 
-module.exports = mongoose.model('Properties',WaterProperties);
+export default mongoose.model('Properties',WaterProperties);

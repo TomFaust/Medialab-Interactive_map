@@ -6,6 +6,7 @@ function countryValidation(data) {
     const schemaCountryValidation = joi.object({
         name: joi.string()
         .min(6)
+        .lowercase({ force: true })
         .required(),
         longitude: joi.number()
         .min(6)
@@ -15,7 +16,7 @@ function countryValidation(data) {
         .required(),
     })
 
-    return schemaCountryValidation.validate(data);
+    return schemaCountryValidation.validate(data, {"convert": true} );
 }
 
 export default countryValidation
