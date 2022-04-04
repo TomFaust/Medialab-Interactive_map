@@ -1,6 +1,7 @@
 import express from 'express'
 import WaterPropertiesController from '../controller/waterPropertiesController.js'
-import verify from '../middleware/verifyToken.js'
+import verifyToken from '../middleware/verifyToken.js'
+import verifyRole from '../middleware/verifyRole.js'
 
 const router = express.Router();
 
@@ -10,13 +11,13 @@ router
     .route('/water-properties').get(WaterPropertiesController.getAllWaterProperties)
   
 router
-    .route('/water-properties').post(verify, WaterPropertiesController.postWaterProperties)    
+    .route('/water-properties').post(verifyToken, verifyRole, WaterPropertiesController.postWaterProperties)    
   
 router
     .route('/water-properties/:id')
     .get(WaterPropertiesController.getWaterProperties)
-    .put(verify, WaterPropertiesController.updateWaterProperties)
-    .delete(verify, WaterPropertiesController.deleteWaterProperties) 
+    .put(verifyToken, verifyRole, WaterPropertiesController.updateWaterProperties)
+    .delete(verifyToken, verifyRole, WaterPropertiesController.deleteWaterProperties) 
 
 
 export default router

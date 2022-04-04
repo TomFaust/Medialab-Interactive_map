@@ -4,7 +4,6 @@ import {registerValidation, loginValidation} from '../validation/userValidation.
 import bcrypt from 'bcryptjs';
 import { env } from '../../config/globals.js';
 
-
 const postRegister = async function(req, res){
    
     //validation data
@@ -48,7 +47,7 @@ const postLogin = async function(req, res){
     if(!validPass) return res.status(400).send("Invalid password");
 
     //Create and assign a token
-    const token = jwt.sign({_id: user._id}, env.LOGIN_TOKEN)
+    const token = jwt.sign({_id: user._id, role: user.role}, env.LOGIN_TOKEN)
     await res.header('auth-token', token).send(token)
 };
 

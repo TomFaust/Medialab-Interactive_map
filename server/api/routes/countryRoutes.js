@@ -1,6 +1,7 @@
 import express from 'express'
 import countryController from '../controller/countryController.js'
-import verify from '../middleware/verifyToken.js'
+import verifyLogin from '../middleware/verifyToken.js'
+import verifyRole from '../middleware/verifyRole.js'
 
 const router = express.Router();
 
@@ -10,13 +11,13 @@ router
     .route('/country').get(countryController.getAllCountry)
   
 router
-    .route('/country').post(verify, countryController.postCountry)    
+    .route('/country').post(verifyLogin, verifyRole, countryController.postCountry)    
   
 router
     .route('/country/:id')
     .get(countryController.getCountry)
-    .put(verify, countryController.updateCountry)
-    .delete(verify, countryController.deleteCountry)
+    .put(verifyLogin, countryController.updateCountry)
+    .delete(verifyLogin, countryController.deleteCountry)
   
 
 export default router
