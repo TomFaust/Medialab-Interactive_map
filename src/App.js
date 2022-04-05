@@ -8,6 +8,7 @@ import CompareIcon from './Assets/compare-icon.svg'
 import MenuIcon from './Assets/menu-icon.svg'
 import SearchIcon from './Assets/search-icon.svg'
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import ReactMapGL, { Marker } from 'react-map-gl';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -237,22 +238,25 @@ export default function App() {
             .then((res) => res.json())
             .then((json) => data = json)
 
+        console.log(data)
+
         setCountries(data)
         loadMarkers(data);
     }
 
-    function handleClick() {
+    async function handleClick(event) {
         // ...
 
-        console.log('hello')
+        var features = map.current.queryRenderedFeatures(event.point, { layers: ['unclustered-point'] });
 
-        map.current.on('click', 'unclustered-point', (e) => {
-            const name = e.features[0].properties['name'];
-            selectedData(name)
-            selectedData('Netherlands')
-        });
+        if (!features.length) {
+            return;
+        }
 
-        console.log('--------------------')
+        const name = features[0].properties['name'];
+
+        await selectedData(name)
+
     }
 
     const handleClickRef = useRef(handleClick)
@@ -266,7 +270,6 @@ export default function App() {
             <div ref={mapContainer}
                  onClick={(map, event) => handleClickRef.current(map, event)}
                  className="map-container">
-
             </div>
 
             <div id='menu-bar'>
@@ -280,7 +283,7 @@ export default function App() {
             <Compare open={openCompare} baseData={baseData} compareData={compareData} baseCountry={baseCountry} compareCountry={compareCountry} setIsBaseCountry={setIsBaseCountry}/>
 
             {/* temporary solution, the onClick needs to be corresponding to the location pins on the map. */}
-            <div className='countries'> 
+            <div className='countries'>
                 <div onClick={()=> selectedData("Netherlands")}> Netherlands </div>
                 <div onClick={()=> selectedData("Belgium")}> Belgium </div>
                 <div onClick={()=> selectedData("Germany")}> Germany </div>
