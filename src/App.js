@@ -19,6 +19,7 @@ export default function App() {
     const [zoom, setZoom] = useState(9);
 
     const [countries, setCountries] = useState({})
+
     const [openCompare, setOpenCompare] = useState(false);
     const [isBaseCountry, setIsBaseCountry] = useState(true);
     const [baseData, setBaseData] = useState({});
@@ -61,10 +62,9 @@ export default function App() {
         document.querySelector('[aria-label="Mapbox logo"]').remove();
 
         map.current.on('load', () => {
-
             fetchCountries()
-
         })
+
 
         // map.current.addControl(
         //     new MapboxGeocoder({
@@ -73,26 +73,8 @@ export default function App() {
         //     }),
         //     'top-left'
         // );
-    }, []);
 
-    // Call this function via an onClick on the mappositions
-    async function selectedData(location) {
-        // Get the selected country data
-        let selectedCountry = countries.find(obj => {
-            return obj.name === location
-        })
-        // console.log(selectedCountry._id);
-
-        // Check which country the user wants to change
-        if (isBaseCountry) {
-            setBaseData(await fetchWaterData(selectedCountry._id))
-        } else {
-            setCompareData(await fetchWaterData(selectedCountry._id))
-        }
-
-        // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
-        setIsBaseCountry(false)
-    }
+    }, [countries]);
 
     async function loadMarkers(data) {
 
@@ -106,25 +88,19 @@ export default function App() {
             require.context("./Assets/map-icons", false, /\.(png|jpe?g|svg)$/)
         );
 
-        console.log(data);
-
         let markerInfo = []
 
         data.forEach(function (datapoint) {
-
-                markerInfo.push(
-                    {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [datapoint['latitude'],datapoint['longitude']]
-                        },
-                        'properties': {
-                            'name': datapoint['name']
-                        }
-                    }
-                )
-
+            markerInfo.push({
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [datapoint['latitude'],datapoint['longitude']]
+                },
+                'properties': {
+                    'name': datapoint['name']
+                }
+            })
         })
 
         map.current.loadImage(
@@ -160,16 +136,6 @@ export default function App() {
                         'icon-size': 0.09
                     }
                 });
-
-                map.current.on('click', 'unclustered-point', (e) => {
-                    const name = e.features[0].properties['name'];
-                    console.log(name)
-
-                    selectedData(name)
-                    //selectedData('Germany')
-
-                });
-
             }
         );
     }
@@ -230,10 +196,6 @@ export default function App() {
     // Call this function via an onClick on the mappositions
     // See what country is clicked, fetch the correct data and put it in state Base- or CompareCountry
     async function selectedData(location) {
-
-        console.log('countries: ')
-        console.log(countries)
-
         // Get the selected country data
         let selectedCountry = countries.find(obj => {
             return obj.name === location
@@ -250,7 +212,7 @@ export default function App() {
             setCompareData(await fetchCountryWaterProps(selectedCountry.companies[0]._id))
             setCompareCountry(location)
         }
-        
+
         // If the base country has changed, set the switch to false, so that the next chosen country will alter the compare country
         setIsBaseCountry(false)
     }
@@ -279,12 +241,32 @@ export default function App() {
         loadMarkers(data);
     }
 
+    function handleClick() {
+        // ...
+
+        console.log('hello')
+
+        map.current.on('click', 'unclustered-point', (e) => {
+            const name = e.features[0].properties['name'];
+            selectedData(name)
+            selectedData('Netherlands')
+        });
+
+        console.log('--------------------')
+    }
+
+    const handleClickRef = useRef(handleClick)
+    handleClickRef.current = handleClick // update reference with every render
+
     return (
         <div>
             <div className="sidebar">
                 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
             </div>
-            <div ref={mapContainer} className="map-container">
+            <div ref={mapContainer}
+                 onClick={(map, event) => handleClickRef.current(map, event)}
+                 className="map-container">
+
             </div>
 
             <div id='menu-bar'>
